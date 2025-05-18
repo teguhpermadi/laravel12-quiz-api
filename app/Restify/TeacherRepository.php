@@ -13,8 +13,8 @@ class TeacherRepository extends Repository
     {
         return [
             id(),
-            field('name'),
-            field('gender'),
+            field('name')->rules('required', 'max:255', 'string'),
+            field('gender')->rules('required', 'in:male,female'),
         ];
     }
 }

@@ -22,31 +22,31 @@ class TeacherPolicy
 
     public function store(User $user): bool
     {
-        return false;
+        return true;
     }
 
     public function storeBulk(User $user): bool
     {
-        return false;
+        return true;
     }
 
     public function update(User $user, Teacher $model): bool
     {
-        return false;
+        return true;
     }
 
     public function updateBulk(User $user, Teacher $model): bool
     {
-        return false;
+        return true;
     }
 
     public function deleteBulk(User $user, Teacher $model): bool
     {
-        return false;
+        return true;
     }
 
     public function delete(User $user, Teacher $model): bool
     {
-        return false;
+        return true;
     }
 }
