@@ -13,10 +13,10 @@ class StudentRepository extends Repository
     {
         return [
             id(),
-            \field('name'),
-            \field('gender'),
-            \field('nisn'),
-            \field('nis'),
+            \field('name')->rules('required','max:255'),
+            \field('gender')->rules('required','in:male,female'),
+            \field('nisn')->rules('required','max:10','min:10','unique:students,nisn'),
+            \field('nis')->rules('required','max:8','min:8','unique:students,nis'),
         ];
     }
 }

@@ -13,8 +13,8 @@ class SubjectRepository extends Repository
     {
         return [
             id(),
-            \field('name'),
-            \field('code'),
+            \field('name')->rules('required','max:255'),
+            \field('code')->rules('required','max:10','min:10','unique:subjects,code'),
         ];
     }
 }

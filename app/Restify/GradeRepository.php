@@ -13,8 +13,8 @@ class GradeRepository extends Repository
     {
         return [
             id(),
-            \field('name'),
-            \field('level'),
+            \field('name')->rules('required', 'max:255'),
+            \field('level')->rules('required', 'numeric', 'min:1', 'max:12'),
         ];
     }
 }
