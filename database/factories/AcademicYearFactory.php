@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +20,7 @@ class AcademicYearFactory extends Factory
         return [
             'year' => $this->faker->year(),
             'semester' => $this->faker->randomElement(['odd', 'even']),
+            'teacher_id' => Teacher::get()->random()->id,
         ];
     }
 }
