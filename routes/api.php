@@ -17,4 +17,6 @@ Route::prefix('auth')->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 });
 
+Route::apiResource('teachers', \App\Http\Controllers\TeacherController::class);
+
 // Route::restifyAuth();
