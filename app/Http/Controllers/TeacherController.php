@@ -49,7 +49,7 @@ class TeacherController extends Controller
         
         return response()->json([
             'status' => 'success',
-            'message' => 'Guru berhasil ditambahkan',
+            'message' => 'Teacher added successfully',
             'data' => new TeacherResource($teacher)
         ], 201);
     }
@@ -74,7 +74,7 @@ class TeacherController extends Controller
         
         return response()->json([
             'status' => 'success',
-            'message' => 'Data guru berhasil diperbarui',
+            'message' => 'Teacher data updated successfully',
             'data' => new TeacherResource($teacher)
         ]);
     }
@@ -88,7 +88,7 @@ class TeacherController extends Controller
         
         return response()->json([
             'status' => 'success',
-            'message' => 'Data guru berhasil dihapus'
+            'message' => 'Teacher data deleted successfully'
         ]);
     }
 }
