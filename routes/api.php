@@ -24,5 +24,4 @@ Route::apiResource('teachers', \App\Http\Controllers\TeacherController::class);
 Route::apiResource('students', \App\Http\Controllers\StudentController::class);
 Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class);
 Route::apiResource('grades', \App\Http\Controllers\GradeController::class);
-
-// Route::restifyAuth();
+Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);
