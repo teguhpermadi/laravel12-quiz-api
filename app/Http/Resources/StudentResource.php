@@ -15,6 +15,9 @@ class StudentResource extends JsonResource
             'gender' => $this->gender,
             'nisn' => $this->nisn,
             'nis' => $this->nis,
+            'grades' => $this->when($this->relationLoaded('grades'), function() {
+                return StudentGradeResource::collection($this->grades);
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

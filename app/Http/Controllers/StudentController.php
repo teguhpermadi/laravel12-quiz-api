@@ -15,11 +15,22 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $students = QueryBuilder::for(Student::class)
+        $academicYearId = $request->input('academic_year_id');
+        
+        $query = QueryBuilder::for(Student::class)
             ->allowedFilters(Student::allowedFilters())
             ->allowedSorts(Student::allowedSorts())
-            ->allowedIncludes(Student::allowedIncludes())
-            ->paginate($request->input('per_page', 15))
+            ->allowedIncludes(Student::allowedIncludes());
+            
+        // Jika ada parameter academic_year_id, load grades berdasarkan tahun akademik
+        if ($academicYearId) {
+            $query->with(['grades' => function($query) use ($academicYearId) {
+                $query->where('academic_year_id', $academicYearId)
+                      ->with(['grade', 'academicYear']);
+            }]);
+        }
+        
+        $students = $query->paginate($request->input('per_page', 15))
             ->appends($request->query());
         
         return response()->json([
@@ -59,8 +70,18 @@ class StudentController extends Controller
     /**
      * Menampilkan detail siswa
      */
-    public function show(Student $student)
+    public function show(Request $request, Student $student)
     {
+        $academicYearId = $request->input('academic_year_id');
+        
+        // Jika ada parameter academic_year_id, load grades berdasarkan tahun akademik
+        if ($academicYearId) {
+            $student->load(['grades' => function($query) use ($academicYearId) {
+                $query->where('academic_year_id', $academicYearId)
+                      ->with(['grade', 'academicYear']);
+            }]);
+        }
+        
         return response()->json([
             'status' => 'success',
             'data' => new StudentResource($student)

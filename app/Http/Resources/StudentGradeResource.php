@@ -15,13 +15,18 @@ class StudentGradeResource extends JsonResource
             'student_id' => $this->student_id,
             'grade_id' => $this->grade_id,
             'academic_year' => $this->whenLoaded('academicYear', function() {
-                return new AcademicYearResource($this->academicYear);
-            }),
-            'student' => $this->whenLoaded('student', function() {
-                return new StudentResource($this->student);
+                return [
+                    'id' => $this->academicYear->id,
+                    'year' => $this->academicYear->year,
+                    'semester' => $this->academicYear->semester,
+                ];
             }),
             'grade' => $this->whenLoaded('grade', function() {
-                return new GradeResource($this->grade);
+                return [
+                    'id' => $this->grade->id,
+                    'name' => $this->grade->name,
+                    'level' => $this->grade->level,
+                ];
             }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
