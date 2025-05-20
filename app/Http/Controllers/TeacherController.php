@@ -15,11 +15,29 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
-        $teachers = QueryBuilder::for(Teacher::class)
+        $academicYearId = $request->input('academic_year_id');
+        
+        $query = QueryBuilder::for(Teacher::class)
             ->allowedFilters(Teacher::allowedFilters())
             ->allowedSorts(Teacher::allowedSorts())
-            ->allowedIncludes(Teacher::allowedIncludes())
-            ->paginate($request->input('per_page', 15))
+            ->allowedIncludes(Teacher::allowedIncludes());
+            
+        // Jika ada parameter academic_year_id, load subjects berdasarkan tahun akademik
+        if ($academicYearId) {
+            $query->withCount(['subjects as subject_count' => function($query) use ($academicYearId) {
+                $query->where('academic_year_id', $academicYearId);
+            }]);
+            
+            $query->with(['subjects' => function($query) use ($academicYearId) {
+                $query->where('academic_year_id', $academicYearId)
+                      ->with(['subject', 'academicYear']);
+            }]);
+        } else {
+            // Jika tidak ada parameter academic_year_id, hitung semua subject
+            $query->withCount('subjects as subject_count');
+        }
+        
+        $teachers = $query->paginate($request->input('per_page', 15))
             ->appends($request->query());
         
         return response()->json([
@@ -59,8 +77,25 @@ class TeacherController extends Controller
     /**
      * Menampilkan detail guru
      */
-    public function show(Teacher $teacher)
+    public function show(Request $request, Teacher $teacher)
     {
+        $academicYearId = $request->input('academic_year_id');
+        
+        // Jika ada parameter academic_year_id, load subjects berdasarkan tahun akademik
+        if ($academicYearId) {
+            $teacher->loadCount(['subjects as subject_count' => function($query) use ($academicYearId) {
+                $query->where('academic_year_id', $academicYearId);
+            }]);
+            
+            $teacher->load(['subjects' => function($query) use ($academicYearId) {
+                $query->where('academic_year_id', $academicYearId)
+                      ->with(['subject', 'academicYear']);
+            }]);
+        } else {
+            // Jika tidak ada parameter academic_year_id, hitung semua subject
+            $teacher->loadCount('subjects as subject_count');
+        }
+        
         return response()->json([
             'status' => 'success',
             'data' => new TeacherResource($teacher)
