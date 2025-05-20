@@ -5,20 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TeacherRequest;
 use App\Http\Resources\TeacherResource;
 use App\Models\Teacher;
-use App\Traits\ApiQueryBuilder;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TeacherController extends Controller
 {
-    use ApiQueryBuilder;
-    
     /**
      * Menampilkan daftar semua guru dengan filter, sorting, dan pagination
      */
     public function index(Request $request)
     {
-        $query = Teacher::query();
-        $teachers = $this->applyQueryBuilder($request, $query);
+        $teachers = QueryBuilder::for(Teacher::class)
+            ->allowedFilters(Teacher::allowedFilters())
+            ->allowedSorts(Teacher::allowedSorts())
+            ->allowedIncludes(Teacher::allowedIncludes())
+            ->paginate($request->input('per_page', 15))
+            ->appends($request->query());
         
         return response()->json([
             'status' => 'success',

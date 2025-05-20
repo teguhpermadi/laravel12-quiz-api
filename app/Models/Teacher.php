@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class Teacher extends Model
 {
@@ -14,4 +15,23 @@ class Teacher extends Model
         'name',
         'gender',
     ];  
+
+    public static function allowedFilters()
+    {
+        return [
+            AllowedFilter::exact('id'),
+            'name',
+            'gender',
+        ];
+    }
+
+    public static function allowedSorts()
+    {
+        return ['id', 'name', 'gender', 'created_at', 'updated_at'];
+    }
+
+    public static function allowedIncludes()
+    {
+        return [];
+    }
 }

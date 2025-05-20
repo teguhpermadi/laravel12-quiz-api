@@ -5,20 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StudentRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
-use App\Traits\ApiQueryBuilder;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class StudentController extends Controller
 {
-    use ApiQueryBuilder;
-    
     /**
      * Menampilkan daftar semua siswa dengan filter, sorting, dan pagination
      */
     public function index(Request $request)
     {
-        $query = Student::query();
-        $students = $this->applyQueryBuilder($request, $query);
+        $students = QueryBuilder::for(Student::class)
+            ->allowedFilters(Student::allowedFilters())
+            ->allowedSorts(Student::allowedSorts())
+            ->allowedIncludes(Student::allowedIncludes())
+            ->paginate($request->input('per_page', 15))
+            ->appends($request->query());
         
         return response()->json([
             'status' => 'success',

@@ -5,20 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SubjectRequest;
 use App\Http\Resources\SubjectResource;
 use App\Models\Subject;
-use App\Traits\ApiQueryBuilder;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class SubjectController extends Controller
 {
-    use ApiQueryBuilder;
-    
     /**
      * Menampilkan daftar semua mata pelajaran dengan filter, sorting, dan pagination
      */
     public function index(Request $request)
     {
-        $query = Subject::query();
-        $subjects = $this->applyQueryBuilder($request, $query);
+        $subjects = QueryBuilder::for(Subject::class)
+            ->allowedFilters(Subject::allowedFilters())
+            ->allowedSorts(Subject::allowedSorts())
+            ->allowedIncludes(Subject::allowedIncludes())
+            ->paginate($request->input('per_page', 15))
+            ->appends($request->query());
         
         return response()->json([
             'status' => 'success',

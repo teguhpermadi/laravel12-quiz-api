@@ -5,20 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GradeRequest;
 use App\Http\Resources\GradeResource;
 use App\Models\Grade;
-use App\Traits\ApiQueryBuilder;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class GradeController extends Controller
 {
-    use ApiQueryBuilder;
-    
     /**
      * Menampilkan daftar semua kelas dengan filter, sorting, dan pagination
      */
     public function index(Request $request)
     {
-        $query = Grade::query();
-        $grades = $this->applyQueryBuilder($request, $query);
+        $grades = QueryBuilder::for(Grade::class)
+            ->allowedFilters(Grade::allowedFilters())
+            ->allowedSorts(Grade::allowedSorts())
+            ->allowedIncludes(Grade::allowedIncludes())
+            ->paginate($request->input('per_page', 15))
+            ->appends($request->query());
         
         return response()->json([
             'status' => 'success',
