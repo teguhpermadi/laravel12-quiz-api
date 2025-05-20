@@ -25,3 +25,4 @@ Route::apiResource('students', \App\Http\Controllers\StudentController::class);
 Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class);
 Route::apiResource('grades', \App\Http\Controllers\GradeController::class);
 Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);
+Route::apiResource('student-grades', \App\Http\Controllers\StudentGradeController::class);

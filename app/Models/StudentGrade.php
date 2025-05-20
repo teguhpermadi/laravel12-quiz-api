@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class StudentGrade extends Model
 {
@@ -30,5 +31,25 @@ class StudentGrade extends Model
     public function grade()
     {
         return $this->belongsTo(Grade::class);
+    }
+    
+    public static function allowedFilters()
+    {
+        return [
+            AllowedFilter::exact('id'),
+            AllowedFilter::exact('academic_year_id'),
+            AllowedFilter::exact('student_id'),
+            AllowedFilter::exact('grade_id'),
+        ];
+    }
+    
+    public static function allowedSorts()
+    {
+        return ['id', 'academic_year_id', 'student_id', 'grade_id', 'created_at', 'updated_at'];
+    }
+    
+    public static function allowedIncludes()
+    {
+        return ['academicYear', 'student', 'grade'];
     }
 }
