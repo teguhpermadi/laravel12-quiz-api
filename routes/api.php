@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::apiResource('teachers', \App\Http\Controllers\TeacherController::class);
 Route::apiResource('students', \App\Http\Controllers\StudentController::class);
+Route::apiResource('questions', \App\Http\Controllers\QuestionController::class);
 Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class);
 Route::apiResource('grades', \App\Http\Controllers\GradeController::class);
 Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);

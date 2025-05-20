@@ -33,4 +33,35 @@ class Question extends Model implements HasMedia
     {
         return $this->belongsTo(Teacher::class);
     }
+
+    public static function allowedFilters(): array
+    {
+        return [
+            'question',
+            'question_type',
+            'time',
+            'score',
+            'teacher_id',
+        ];
+    }
+
+    public static function allowedSorts(): array
+    {
+        return [
+            'question',
+            'question_type',
+            'time',
+            'score',
+            'teacher_id',
+            'created_at',
+            'updated_at',
+        ];
+    }
+
+    public static function allowedIncludes(): array
+    {
+        return [
+            'teacher',
+        ];
+    }
 }
