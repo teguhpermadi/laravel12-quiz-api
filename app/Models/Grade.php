@@ -23,6 +23,7 @@ class Grade extends Model
             AllowedFilter::exact('id'),
             'name',
             'level',
+            AllowedFilter::exact('academic_year_id'),
         ];
     }
     
@@ -33,6 +34,16 @@ class Grade extends Model
     
     public static function allowedIncludes()
     {
-        return [];
+        return ['students', 'students.student', 'students.academicYear'];
+    }
+
+    public function students()
+    {
+        return $this->hasMany(StudentGrade::class);
+    }
+    
+    public function studentsByAcademicYear($academicYearId)
+    {
+        return $this->students()->where('academic_year_id', $academicYearId);
     }
 }
