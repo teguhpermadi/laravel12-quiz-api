@@ -27,3 +27,4 @@ Route::apiResource('grades', \App\Http\Controllers\GradeController::class);
 Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);
 Route::apiResource('student-grades', \App\Http\Controllers\StudentGradeController::class);
 Route::apiResource('teacher-subjects', \App\Http\Controllers\TeacherSubjectController::class);
+Route::get('/question-types', [\App\Http\Controllers\API\QuestionTypeController::class, 'index']);
