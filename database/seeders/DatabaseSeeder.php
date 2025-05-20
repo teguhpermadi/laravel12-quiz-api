@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             StudentGradeSeeder::class,
             TeacherSubjectSeeder::class,
             ExamSeeder::class,
+            QuestionSeeder::class,
         ]);
     }
 }
