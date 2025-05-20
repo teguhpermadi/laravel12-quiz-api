@@ -29,3 +29,5 @@ Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearControlle
 Route::apiResource('student-grades', \App\Http\Controllers\StudentGradeController::class);
 Route::apiResource('teacher-subjects', \App\Http\Controllers\TeacherSubjectController::class);
 Route::get('/question-types', [\App\Http\Controllers\API\QuestionTypeController::class, 'index']);
+Route::get('/time-options', [\App\Http\Controllers\API\TimeController::class, 'index']);
+Route::get('/score-options', [\App\Http\Controllers\API\ScoreController::class, 'index']);
