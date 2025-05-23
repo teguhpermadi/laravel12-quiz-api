@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\QuestionTypeEnum;
 use App\Enums\ScoreEnum;
 use App\Enums\TimeEnum;
+use App\Models\Literature;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -19,9 +20,11 @@ class QuestionFactory extends Factory
             'teacher_id' => \App\Models\Teacher::factory(),
             'time' => $this->faker->randomElement(TimeEnum::cases()),
             'score' => $this->faker->randomElement(ScoreEnum::cases()),
+            'literature_id' => $this->faker->optional(0.3)->randomElement(Literature::pluck('id')->toArray()), // 30% kemungkinan memiliki literature
         ];
     }
 
+    // Sisanya tetap sama seperti sebelumnya
     public function configure()
     {
         return $this->afterCreating(function ($question) {
@@ -58,6 +61,12 @@ class QuestionFactory extends Factory
                 $textColor = imagecolorallocate($image, 255, 255, 255);
                 $text = "Question ID: " . $question->id;
                 imagestring($image, 5, 20, 20, $text, $textColor);
+                
+                // Jika ada literature, tambahkan informasi literature
+                if ($question->literature_id) {
+                    $litText = "Literature: " . substr($question->literature->title ?? 'Unknown', 0, 20);
+                    imagestring($image, 4, 20, 50, $litText, $textColor);
+                }
                 
                 // Simpan gambar ke file
                 $filename = Str::random(40) . '.jpg';

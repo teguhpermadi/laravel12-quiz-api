@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             AcademicYearSeeder::class,
             StudentGradeSeeder::class,
             TeacherSubjectSeeder::class,
+            LiteratureSeeder::class, // Tambahkan LiteratureSeeder sebelum ExamSeeder dan QuestionSeeder
             ExamSeeder::class,
             QuestionSeeder::class,
         ]);

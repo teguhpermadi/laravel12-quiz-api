@@ -21,6 +21,7 @@ class Question extends Model implements HasMedia
         'teacher_id',
         'time',
         'score',
+        'literature_id', // Menambahkan literature_id ke fillable
     ];
 
     protected $casts = [
@@ -41,6 +42,12 @@ class Question extends Model implements HasMedia
         return $this->belongsTo(Teacher::class);
     }
 
+    // Menambahkan relasi dengan Literature
+    public function literature()
+    {
+        return $this->belongsTo(Literature::class);
+    }
+
     public static function allowedFilters(): array
     {
         return [
@@ -49,6 +56,7 @@ class Question extends Model implements HasMedia
             'time',
             'score',
             'teacher_id',
+            'literature_id', // Menambahkan literature_id ke allowed filters
         ];
     }
 
@@ -60,6 +68,7 @@ class Question extends Model implements HasMedia
             'time',
             'score',
             'teacher_id',
+            'literature_id', // Menambahkan literature_id ke allowed sorts
             'created_at',
             'updated_at',
         ];
@@ -69,6 +78,7 @@ class Question extends Model implements HasMedia
     {
         return [
             'teacher',
+            'literature', // Menambahkan literature ke allowed includes
         ];
     }
 }
