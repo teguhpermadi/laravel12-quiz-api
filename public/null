@@ -1,0 +1,159 @@
+$faker = Faker\Factory::create();
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
+dd($filePath);
+$faker = Faker\Factory::create();
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
+dd($filePath);
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
+
+dd($filePath);
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800, seed: 'useremail@example.com');
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800);
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800, seed:1);
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800, seed:'#1');
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800, seed:'#1');
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800, seed:'#1');
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800, seed:'#1');
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800, seed:'#1');
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800, '#1');
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$filePath= $faker->image(width: 800, height: 800);
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$faker->imageUrl(width: 800, height: 600); 
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$faker->imageUrl(width: 800, height: 600); 
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$faker->imageUrl(width: 800, height: 600); 
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+$faker->imageUrl(width: 800, height: 600); 
+
+
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
+
+
+dd($filePath);
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
+
+
+dd($filePath);
+$faker = \Faker\Factory::create();
+
+$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
+
+
+echo asset('storage/file.txt');
+
+Question::get()
+Question::find('01jvy5sa2kwt5tmryx31az7anq');
+Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
+Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
+Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
+Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
+Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
+Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia('media');
