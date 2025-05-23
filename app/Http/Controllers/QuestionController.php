@@ -50,6 +50,11 @@ class QuestionController extends Controller
     {
         $question = Question::create($request->validated());
         
+        if ($request->hasFile('media')) {
+            $question->addMediaFromRequest('media')
+                ->toMediaCollection('question_media');
+        }
+        
         return response()->json([
             'status' => 'success',
             'message' => 'Question added successfully',
@@ -74,6 +79,12 @@ class QuestionController extends Controller
     public function update(QuestionRequest $request, Question $question)
     {
         $question->update($request->validated());
+        
+        if ($request->hasFile('media')) {
+            $question->clearMediaCollection('question_media');
+            $question->addMediaFromRequest('media')
+                ->toMediaCollection('question_media');
+        }
         
         return response()->json([
             'status' => 'success',

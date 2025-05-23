@@ -14,7 +14,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Question extends Model implements HasMedia
 {
     use HasFactory, HasUlids, InteractsWithMedia;
-
+    
     protected $fillable = [
         'question',
         'question_type', 
@@ -28,6 +28,13 @@ class Question extends Model implements HasMedia
         'time' => TimeEnum::class,
         'score' => ScoreEnum::class,
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('question_media')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'video/mp4']);
+    }
 
     public function teacher()
     {

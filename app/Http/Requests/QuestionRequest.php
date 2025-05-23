@@ -19,6 +19,7 @@ class QuestionRequest extends FormRequest
             'time' => 'required|integer',
             'score' => 'required|integer',
             'teacher_id' => 'required|ulid|exists:teachers,id',
+            'media' => 'sometimes|file|mimetypes:image/jpeg,image/png,video/mp4|max:10240', // 10MB max
         ];
     }
 }

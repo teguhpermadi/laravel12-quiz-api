@@ -9,6 +9,8 @@ class QuestionResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $media = $this->getFirstMedia('question_media');
+        
         return [
             'id' => $this->id,
             'question' => $this->question,
@@ -19,6 +21,12 @@ class QuestionResource extends JsonResource
             'score' => $this->score->value,
             'score_description' => $this->score->description(),
             'teacher_id' => $this->teacher_id,
+            'media' => $media ? [
+                'url' => $media->getUrl(),
+                'mime_type' => $media->mime_type,
+                'size' => $media->size,
+                'file_name' => $media->file_name
+            ] : null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
