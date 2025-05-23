@@ -15,8 +15,6 @@ class Literature extends Model implements HasMedia
     protected $fillable = [
         'title',
         'content',
-        'source',
-        'author',
     ];
 
     public function registerMediaCollections(): void
@@ -36,8 +34,6 @@ class Literature extends Model implements HasMedia
         return [
             'title',
             'content',
-            'source',
-            'author',
         ];
     }
 
@@ -45,8 +41,6 @@ class Literature extends Model implements HasMedia
     {
         return [
             'title',
-            'source',
-            'author',
             'created_at',
             'updated_at',
         ];

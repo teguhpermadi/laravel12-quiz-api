@@ -15,8 +15,6 @@ class LiteratureResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'source' => $this->source,
-            'author' => $this->author,
             'media' => $media ? [
                 'url' => $media->getUrl(),
                 'mime_type' => $media->mime_type,

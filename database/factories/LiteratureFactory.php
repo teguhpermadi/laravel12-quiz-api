@@ -13,8 +13,6 @@ class LiteratureFactory extends Factory
         return [
             'title' => $this->faker->sentence(4),
             'content' => $this->faker->paragraphs(3, true),
-            'source' => $this->faker->optional(0.7)->url(),
-            'author' => $this->faker->optional(0.8)->name(),
         ];
     }
 

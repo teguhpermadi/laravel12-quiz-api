@@ -16,8 +16,6 @@ class LiteratureRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'source' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
             'media' => 'sometimes|file|mimetypes:application/pdf,image/jpeg,image/png|max:10240', // 10MB max
         ];
     }

@@ -12,8 +12,6 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('title');
             $table->text('content');
-            $table->string('source')->nullable();
-            $table->string('author')->nullable();
             $table->timestamps();
         });
     }
