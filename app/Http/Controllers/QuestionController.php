@@ -55,7 +55,9 @@ class QuestionController extends Controller
                 ->toMediaCollection('question_media');
         }
         
-        // Load literature jika ada
+        // Load teacher dan literature jika ada
+        $question->load('teacher');
+        
         if ($question->literature_id) {
             $question->load('literature');
         }
@@ -72,7 +74,9 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        // Load literature jika ada
+        // Load teacher dan literature jika ada
+        $question->load('teacher');
+        
         if ($question->literature_id) {
             $question->load('literature');
         }
@@ -96,7 +100,9 @@ class QuestionController extends Controller
                 ->toMediaCollection('question_media');
         }
         
-        // Load literature jika ada
+        // Load teacher dan literature jika ada
+        $question->load('teacher');
+        
         if ($question->literature_id) {
             $question->load('literature');
         }

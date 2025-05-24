@@ -22,7 +22,9 @@ class LiteratureResource extends JsonResource
                 'file_name' => $media->file_name
             ] : null,
             'questions_count' => $this->when(isset($this->questions_count), $this->questions_count),
-            'questions' => QuestionResource::collection($this->whenLoaded('questions')),
+            'questions' => $this->whenLoaded('questions', function () {
+                return QuestionResource::collection($this->questions);
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

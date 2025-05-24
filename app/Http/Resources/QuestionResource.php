@@ -21,19 +21,12 @@ class QuestionResource extends JsonResource
             'score' => $this->score->value,
             'score_description' => $this->score->description(),
             'teacher_id' => $this->teacher_id,
+            'teacher' => $this->whenLoaded('teacher', function () {
+                return new TeacherResource($this->teacher);
+            }),
             'literature_id' => $this->literature_id,
             'literature' => $this->whenLoaded('literature', function () {
-                return [
-                    'id' => $this->literature->id,
-                    'title' => $this->literature->title,
-                    'content' => $this->literature->content,
-                    'media' => $this->literature->getFirstMedia('literature_media') ? [
-                        'url' => $this->literature->getFirstMedia('literature_media')->getUrl(),
-                        'mime_type' => $this->literature->getFirstMedia('literature_media')->mime_type,
-                        'size' => $this->literature->getFirstMedia('literature_media')->size,
-                        'file_name' => $this->literature->getFirstMedia('literature_media')->file_name
-                    ] : null
-                ];
+                return new LiteratureResource($this->literature);
             }),
             'media' => $media ? [
                 'url' => $media->getUrl(),
