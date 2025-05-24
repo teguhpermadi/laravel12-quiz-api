@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
 
 class Exam extends Model
 {
-    /** @use HasFactory<\Database\Factories\ExamFactory> */
     use HasFactory, HasUlids;
-
+    
     protected $fillable = [
         'title',
         'teacher_id',
@@ -31,5 +31,33 @@ class Exam extends Model
     public function grade()
     {
         return $this->belongsTo(Grade::class);
+    }
+
+    public static function allowedFilters(): array
+    {
+        return [
+            'title',
+            'teacher_id',
+            'subject_id',
+            'grade_id'
+        ];
+    }
+
+    public static function allowedSorts(): array
+    {
+        return [
+            'title',
+            'created_at',
+            'updated_at'
+        ];
+    }
+
+    public static function allowedIncludes(): array
+    {
+        return [
+            'teacher',
+            'subject',
+            'grade'
+        ];
     }
 }
