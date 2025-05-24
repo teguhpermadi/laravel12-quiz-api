@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             LiteratureSeeder::class, // Tambahkan LiteratureSeeder sebelum ExamSeeder dan QuestionSeeder
             ExamSeeder::class,
             QuestionSeeder::class,
+            ExamQuestionSeeder::class,
         ]);
     }
 }

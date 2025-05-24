@@ -16,6 +16,7 @@ class QuestionResource extends JsonResource
             'question' => $this->question,
             'question_type' => $this->question_type->value,
             'question_type_description' => $this->question_type->description(),
+            'order' => $this->when(isset($this->order), $this->order),
             'time' => $this->time->value,
             'time_description' => $this->time->description(),
             'score' => $this->score->value,

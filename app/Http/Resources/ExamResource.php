@@ -18,6 +18,15 @@ class ExamResource extends JsonResource
             'subject' => $this->whenLoaded('subject', new SubjectResource($this->subject)),
             'grade_id' => $this->grade_id,
             'grade' => $this->whenLoaded('grade'),
+            'questions_count' => $this->when(isset($this->questions_count), $this->questions_count),
+            'questions' => $this->whenLoaded('questions', function () {
+                return QuestionResource::collection(
+                    $this->questions->map(function($question) {
+                        $question->order = $question->pivot->order;
+                        return $question;
+                    })->sortBy('order')
+                );
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

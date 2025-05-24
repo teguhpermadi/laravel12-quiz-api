@@ -33,6 +33,23 @@ class Exam extends Model
         return $this->belongsTo(Grade::class);
     }
 
+    public function questions()
+    {
+        return $this->belongsToMany(Question::class, 'exam_question')
+            ->withPivot('order')
+            ->orderByPivot('order');
+    }
+
+    public static function allowedIncludes(): array
+    {
+        return [
+            'teacher',
+            'subject',
+            'grade',
+            'questions' // Add questions to allowed includes
+        ];
+    }
+    
     public static function allowedFilters(): array
     {
         return [
@@ -42,22 +59,13 @@ class Exam extends Model
             'grade_id'
         ];
     }
-
+    
     public static function allowedSorts(): array
     {
         return [
             'title',
             'created_at',
             'updated_at'
-        ];
-    }
-
-    public static function allowedIncludes(): array
-    {
-        return [
-            'teacher',
-            'subject',
-            'grade'
         ];
     }
 }

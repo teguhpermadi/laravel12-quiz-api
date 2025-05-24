@@ -15,7 +15,8 @@ class ExamController extends Controller
         $query = QueryBuilder::for(Exam::class)
             ->allowedFilters(Exam::allowedFilters())
             ->allowedSorts(Exam::allowedSorts())
-            ->allowedIncludes(Exam::allowedIncludes());
+            ->allowedIncludes(Exam::allowedIncludes())
+            ->withCount('questions');
             
         $exams = $query->paginate($request->input('per_page', 15))
             ->appends($request->query());
@@ -41,7 +42,9 @@ class ExamController extends Controller
 
     public function show(Exam $exam)
     {
-        $exam->load(['teacher', 'subject', 'grade']);
+        $exam->load(['teacher', 'subject', 'grade', 'questions']);
+        // tambahkan query withCount('questions')
+        $exam->loadCount('questions');
         
         return response()->json([
             'status' => 'success',
