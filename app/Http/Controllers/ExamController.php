@@ -13,7 +13,7 @@ class ExamController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Exam::class)
-        ->allowedFilters(Exam::allowedFilters())
+            ->allowedFilters(Exam::allowedFilters())
             ->allowedSorts(Exam::allowedSorts())
             ->allowedIncludes(Exam::allowedIncludes());
             
