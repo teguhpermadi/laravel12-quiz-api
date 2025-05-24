@@ -55,6 +55,11 @@ class QuestionController extends Controller
                 ->toMediaCollection('question_media');
         }
         
+        // Load literature jika ada
+        if ($question->literature_id) {
+            $question->load('literature');
+        }
+        
         return response()->json([
             'status' => 'success',
             'message' => 'Question added successfully',
@@ -67,6 +72,11 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
+        // Load literature jika ada
+        if ($question->literature_id) {
+            $question->load('literature');
+        }
+        
         return response()->json([
             'status' => 'success',
             'data' => new QuestionResource($question)
@@ -84,6 +94,11 @@ class QuestionController extends Controller
             $question->clearMediaCollection('question_media');
             $question->addMediaFromRequest('media')
                 ->toMediaCollection('question_media');
+        }
+        
+        // Load literature jika ada
+        if ($question->literature_id) {
+            $question->load('literature');
         }
         
         return response()->json([
