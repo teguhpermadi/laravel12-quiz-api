@@ -81,4 +81,9 @@ class Question extends Model implements HasMedia
             'literature', // Menambahkan literature ke allowed includes
         ];
     }
+
+    public function answer()
+    {
+        return $this->morphTo('answerable');
+    }
 }

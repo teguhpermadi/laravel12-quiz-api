@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('multiple_choices', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('question_id');
             $table->string('choice');
             $table->boolean('is_correct')->default(false);
             $table->timestamps();

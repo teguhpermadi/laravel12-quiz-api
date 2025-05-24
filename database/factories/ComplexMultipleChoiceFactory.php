@@ -12,7 +12,6 @@ class ComplexMultipleChoiceFactory extends Factory
     public function definition(): array
     {
         return [
-            'question_id' => Question::get()->random()->id,
             'choice' => $this->faker->sentence(),
             'is_correct' => $this->faker->boolean(),
         ];

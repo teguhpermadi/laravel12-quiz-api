@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('complex_multiple_choices', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('question_id')->constrained('questions')->cascadeOnDelete();
             $table->text('choice');
             $table->boolean('is_correct')->default(false);
             $table->timestamps();

@@ -13,14 +13,13 @@ class MultipleChoice extends Model implements HasMedia
     use HasFactory, HasUlids, InteractsWithMedia;
 
     protected $fillable = [
-        'question_id',
         'choice',
         'is_correct',
     ];
     
     public function question()
     {
-        return $this->belongsTo(Question::class);
+        return $this->morphOne(Question::class, 'answerable');
     }
 
     public function registerMediaCollections(): void
