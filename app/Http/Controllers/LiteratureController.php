@@ -18,7 +18,8 @@ class LiteratureController extends Controller
         $query = QueryBuilder::for(Literature::class)
             ->allowedFilters(Literature::allowedFilters())
             ->allowedSorts(Literature::allowedSorts())
-            ->allowedIncludes(Literature::allowedIncludes());
+            ->allowedIncludes(Literature::allowedIncludes())
+            ->withCount('questions');
             
         // Tambahkan withCount jika diperlukan
         if (in_array('questions', $query->getEagerLoads())) {
