@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ShortAnswer extends Model
+class EssayAnswer extends Model
 {
-    /** @use HasFactory<\Database\Factories\ShortAnswerFactory> */
+    /** @use HasFactory<\Database\Factories\EssayAnswerFactory> */
     use HasFactory, HasUlids;
 
     protected $fillable = [

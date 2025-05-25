@@ -101,8 +101,14 @@ class Question extends Model implements HasMedia
     {
         return $this->morphedByMany(TrueFalse::class, 'answerable', 'answerables');
     }
+    
     public function shortAnswers()
     {
         return $this->morphedByMany(ShortAnswer::class, 'answerable', 'answerables');
+    }
+
+    public function essayAnswers()
+    {
+        return $this->morphedByMany(EssayAnswer::class, 'answerable', 'answerables');
     }
 }
