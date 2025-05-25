@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             MultipleChoiceSeeder::class,
             ComplexMultipleChoiceSeeder::class,
             TrueFalseSeeder::class,
+            ShortAnswerSeeder::class,
             ExamQuestionSeeder::class,
         ]);
     }
