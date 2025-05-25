@@ -2,17 +2,31 @@
 
 namespace Database\Seeders;
 
+use App\Enums\QuestionTypeEnum;
 use App\Models\MultipleChoice;
+use App\Models\Question;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class MultipleChoiceSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        MultipleChoice::factory(10)->create(); // Ganti 10 dengan jumlah data yang Anda inginkan untuk ditambahkan ke dalam tabel multiple_choices.
+        // Create questions with multiple choice answers
+        Question::factory()
+            ->count(10)
+            ->state(['question_type' => QuestionTypeEnum::MULTIPLE_CHOICE])
+            ->has(
+                MultipleChoice::factory()
+                    ->count(3)
+                    ->state(['is_correct' => false]),
+                'multipleChoices'
+            )
+            ->has(
+                MultipleChoice::factory()
+                    ->state(['is_correct' => true]),
+                'multipleChoices'
+            )
+            ->create();
     }
 }

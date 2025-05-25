@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('answerable', function (Blueprint $table) {
+        Schema::create('answerables', function (Blueprint $table) {
             $table->foreignUlid('question_id')->constrained()->cascadeOnDelete();
             $table->ulid('answerable_id');
             $table->string('answerable_type');

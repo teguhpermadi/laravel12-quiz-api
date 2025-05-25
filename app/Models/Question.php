@@ -82,8 +82,18 @@ class Question extends Model implements HasMedia
         ];
     }
 
-    public function answer()
+    public function answerables()
     {
-        return $this->morphTo('answerable');
+        return $this->morphMany(Answerable::class, 'answerable');
+    }
+
+    public function multipleChoices()
+    {
+        return $this->morphedByMany(MultipleChoice::class, 'answerable', 'answerables');
+    }
+
+    public function complexMultipleChoices()
+    {
+        return $this->morphedByMany(ComplexMultipleChoice::class, 'answerable', 'answerables');
     }
 }

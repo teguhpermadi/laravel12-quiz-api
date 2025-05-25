@@ -17,9 +17,9 @@ class MultipleChoice extends Model implements HasMedia
         'is_correct',
     ];
     
-    public function question()
+    public function questions()
     {
-        return $this->morphOne(Question::class, 'answerable');
+        return $this->morphToMany(Question::class, 'answerable', 'answerables');
     }
 
     public function registerMediaCollections(): void

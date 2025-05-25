@@ -30,7 +30,10 @@ class DatabaseSeeder extends Seeder
             TeacherSubjectSeeder::class,
             LiteratureSeeder::class, // Tambahkan LiteratureSeeder sebelum ExamSeeder dan QuestionSeeder
             ExamSeeder::class,
-            QuestionSeeder::class,
+            // QuestionSeeder::class,
+            MultipleChoiceSeeder::class,
+            ComplexMultipleChoiceSeeder::class,
+            
             ExamQuestionSeeder::class,
         ]);
     }

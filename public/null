@@ -1,159 +1,71 @@
-$faker = Faker\Factory::create();
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
-dd($filePath);
-$faker = Faker\Factory::create();
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
-dd($filePath);
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
-
-dd($filePath);
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800, seed: 'useremail@example.com');
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800);
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800, seed:1);
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800, seed:'#1');
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800, seed:'#1');
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800, seed:'#1');
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800, seed:'#1');
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800, seed:'#1');
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800, '#1');
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$filePath= $faker->image(width: 800, height: 800);
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$faker->imageUrl(width: 800, height: 600); 
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$faker->imageUrl(width: 800, height: 600); 
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$faker->imageUrl(width: 800, height: 600); 
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-$faker->imageUrl(width: 800, height: 600); 
-
-
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
-
-
-dd($filePath);
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-$filePath = $faker->image(storage_path('app/public/media'), 640, 480);
-
-
-dd($filePath);
-$faker = \Faker\Factory::create();
-
-$faker->addProvider(new Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-
-
-echo asset('storage/file.txt');
-
-Question::get()
-Question::find('01jvy5sa2kwt5tmryx31az7anq');
-Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
-Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
-Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
-Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
-Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia();
-Question::find('01jvy5sa2kwt5tmryx31az7anq')->getMedia('media');
+Question::latest()->get()
+Question::latest()->first()
+Question::latest()->first()->answer;
+Question::latest()->first()->answer();
+Question::latest()->first()->answer()->get();
+Question::latest()->first()->with('answer')->get();
+$q = Question::latest()->first();
+
+$q= Question::find('01jw18ycccj5kef2yfbsm5fanc');
+
+$q= Question::with('answer')->find('01jw18ycccj5kef2yfbsm5fanc');
+Question::factory()
+  ->count(10)
+  ->state(['question_type' => QuestionTypeEnum::MULTIPLE_CHOICE])
+  ->has(
+  MultipleChoice::factory()
+  ->count(3)
+  ->state(['is_correct' => false]),
+  'answerable'
+)
+  ->has(
+  MultipleChoice::factory()
+  ->state(['is_correct' => true]),
+  'answerable'
+)
+  ->create();
+
+dd(Question::with('answerable')->get()->toArray());
+use App\Models\MultipleChoice;
+use App\Models\Question;
+
+
+Question::factory()
+  ->count(10)
+  ->state(['question_type' => QuestionTypeEnum::MULTIPLE_CHOICE])
+  ->has(
+  MultipleChoice::factory()
+  ->count(3)
+  ->state(['is_correct' => false]),
+  'answerable'
+)
+  ->has(
+  MultipleChoice::factory()
+  ->state(['is_correct' => true]),
+  'answerable'
+)
+  ->create();
+
+dd(Question::with('answerable')->get()->toArray());
+use App\Models\MultipleChoice;
+use App\Models\Question;
+use App\Enums\QuestionTypeEnum;
+
+
+Question::factory()
+  ->count(10)
+  ->state(['question_type' => QuestionTypeEnum::MULTIPLE_CHOICE])
+  ->has(
+  MultipleChoice::factory()
+  ->count(3)
+  ->state(['is_correct' => false]),
+  'answerable'
+)
+  ->has(
+  MultipleChoice::factory()
+  ->state(['is_correct' => true]),
+  'answerable'
+)
+  ->create();
+
+dd(Question::with('answerable')->get()->toArray());
