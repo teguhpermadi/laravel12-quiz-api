@@ -96,4 +96,9 @@ class Question extends Model implements HasMedia
     {
         return $this->morphedByMany(ComplexMultipleChoice::class, 'answerable', 'answerables');
     }
+
+    public function trueFalses()
+    {
+        return $this->morphedByMany(TrueFalse::class, 'answerable', 'answerables');
+    }
 }

@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             // QuestionSeeder::class,
             MultipleChoiceSeeder::class,
             ComplexMultipleChoiceSeeder::class,
-            
+            TrueFalseSeeder::class,
             ExamQuestionSeeder::class,
         ]);
     }
