@@ -2,9 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ComplexMultipleChoiceRequest;
+use App\Http\Requests\EssayAnswerRequest;
+use App\Http\Requests\MultipleChoiceRequest;
 use App\Http\Requests\QuestionRequest;
+use App\Http\Requests\ShortAnswerRequest;
+use App\Http\Requests\TrueFalseRequest;
 use App\Http\Resources\QuestionResource;
+use App\Models\ComplexMultipleChoice;
+use App\Models\EssayAnswer;
+use App\Models\MultipleChoice;
 use App\Models\Question;
+use App\Models\ShortAnswer;
+use App\Models\TrueFalse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -18,7 +28,7 @@ class QuestionController extends Controller
         $query = QueryBuilder::for(Question::class)
             ->allowedFilters(Question::allowedFilters())
             ->allowedSorts(Question::allowedSorts());
-        
+
         // Jika ada parameter include, cek apakah mengandung 'answerables'
         if ($request->has('include')) {
             $includes = explode(',', $request->include);
@@ -29,10 +39,10 @@ class QuestionController extends Controller
             // Tetap proses includes biasa
             $query->allowedIncludes(Question::allowedIncludes());
         }
-        
+
         $questions = $query->paginate($request->input('per_page', 15))
             ->appends($request->query());
-        
+
         return response()->json([
             'status' => 'success',
             'data' => QuestionResource::collection($questions),
@@ -56,22 +66,60 @@ class QuestionController extends Controller
     /**
      * Menyimpan pertanyaan baru
      */
-    public function store(QuestionRequest $request)
-    {
-        $question = Question::create($request->validated());
-        
-        if ($request->hasFile('media')) {
-            $question->addMediaFromRequest('media')
-                ->toMediaCollection('question_media');
+    public function store(
+        QuestionRequest $questionRequest,
+        MultipleChoiceRequest $mcRequest,
+        ComplexMultipleChoiceRequest $cmcRequest,
+        TrueFalseRequest $tfRequest,
+        ShortAnswerRequest $saRequest,
+        EssayAnswerRequest $eaRequest,
+    ) {
+        $question = Question::create($questionRequest->validated());
+
+        switch ($questionRequest->question_type) {
+            case 'MULTIPLE_CHOICE':
+                foreach ($mcRequest->choices as $choice) {
+                    $question->answerables()->create([
+                        'answerable_type' => MultipleChoice::class,
+                        'answerable_id' => MultipleChoice::create($choice)->id
+                    ]);
+                }
+                break;
+            case 'COMPLEX_MULTIPLE_CHOICE':
+                foreach ($cmcRequest->choices as $choice) {
+                    $question->answerables()->create([
+                        'answerable_type' => ComplexMultipleChoice::class,
+                        'answerable_id' => ComplexMultipleChoice::create($choice)->id
+                    ]);
+                }
+                break;
+            case 'TRUE_FALSE':
+                $question->answerables()->create([
+                    'answerable_type' => TrueFalse::class,
+                    'answerable_id' => TrueFalse::create($tfRequest->validated())->id
+                ]);
+                break;
+            case 'SHORT_ANSWER':
+                $question->answerables()->create([
+                    'answerable_type' => ShortAnswer::class,
+                    'answerable_id' => ShortAnswer::create($saRequest->validated())->id
+                ]);
+                break;
+            case 'ESSAY':
+                $question->answerables()->create([
+                    'answerable_type' => EssayAnswer::class,
+                    'answerable_id' => EssayAnswer::create($eaRequest->validated())->id
+                ]);
+                break;
         }
-        
+
         // Load teacher dan literature jika ada
         $question->load('teacher');
-        
+
         if ($question->literature_id) {
             $question->load('literature');
         }
-        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Question added successfully',
@@ -102,14 +150,14 @@ class QuestionController extends Controller
                 $question->load('essayAnswers');
                 break;
         }
-        
+
         // Load teacher dan literature jika ada
         $question->load('teacher');
-        
+
         if ($question->literature_id) {
             $question->load('literature');
         }
-        
+
         return response()->json([
             'status' => 'success',
             'data' => new QuestionResource($question)
@@ -122,20 +170,20 @@ class QuestionController extends Controller
     public function update(QuestionRequest $request, Question $question)
     {
         $question->update($request->validated());
-        
+
         if ($request->hasFile('media')) {
             $question->clearMediaCollection('question_media');
             $question->addMediaFromRequest('media')
                 ->toMediaCollection('question_media');
         }
-        
+
         // Load teacher dan literature jika ada
         $question->load('teacher');
-        
+
         if ($question->literature_id) {
             $question->load('literature');
         }
-        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Question updated successfully',
@@ -149,7 +197,7 @@ class QuestionController extends Controller
     public function destroy(Question $question)
     {
         $question->delete();
-        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Question deleted successfully'
