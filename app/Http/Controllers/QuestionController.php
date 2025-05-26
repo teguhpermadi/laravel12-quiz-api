@@ -17,9 +17,19 @@ class QuestionController extends Controller
     {
         $query = QueryBuilder::for(Question::class)
             ->allowedFilters(Question::allowedFilters())
-            ->allowedSorts(Question::allowedSorts())
-            ->allowedIncludes(Question::allowedIncludes());
-            
+            ->allowedSorts(Question::allowedSorts());
+        
+        // Jika ada parameter include, cek apakah mengandung 'answerables'
+        if ($request->has('include')) {
+            $includes = explode(',', $request->include);
+            if (in_array('answerables', $includes)) {
+                // Jika ada 'answerables', load semua relasi answerable
+                $query->with(['multipleChoices', 'complexMultipleChoices', 'trueFalses', 'shortAnswers', 'essayAnswers']);
+            }
+            // Tetap proses includes biasa
+            $query->allowedIncludes(Question::allowedIncludes());
+        }
+        
         $questions = $query->paginate($request->input('per_page', 15))
             ->appends($request->query());
         
@@ -74,6 +84,25 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
+        // Load answerables berdasarkan tipe soal
+        switch ($question->question_type) {
+            case \App\Enums\QuestionTypeEnum::MULTIPLE_CHOICE:
+                $question->load('multipleChoices');
+                break;
+            case \App\Enums\QuestionTypeEnum::COMPLEX_MULTIPLE_CHOICE:
+                $question->load('complexMultipleChoices');
+                break;
+            case \App\Enums\QuestionTypeEnum::TRUE_FALSE:
+                $question->load('trueFalses');
+                break;
+            case \App\Enums\QuestionTypeEnum::SHORT_ANSWER:
+                $question->load('shortAnswers');
+                break;
+            case \App\Enums\QuestionTypeEnum::ESSAY:
+                $question->load('essayAnswers');
+                break;
+        }
+        
         // Load teacher dan literature jika ada
         $question->load('teacher');
         

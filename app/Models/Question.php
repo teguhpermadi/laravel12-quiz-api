@@ -78,7 +78,13 @@ class Question extends Model implements HasMedia
     {
         return [
             'teacher',
-            'literature', // Menambahkan literature ke allowed includes
+            'literature',
+            'answerables',
+            'multipleChoices',
+            'complexMultipleChoices',
+            'trueFalses',
+            'shortAnswers',
+            'essayAnswers'
         ];
     }
 
