@@ -3,3 +3,8 @@ User::get()
 User::get()
 User::get()
 Role::get()
+User::get()
+User::find('01jx26dtcbgqr3c6dxjpr05e5m')->role
+User::find('01jx26dtcbgqr3c6dxjpr05e5m')->getRoleNames()
+User::find('01jx26dtcbgqr3c6dxjpr05e5m')->getRoleName()
+User::find('01jx26dtcbgqr3c6dxjpr05e5m')->getRoleNames()
