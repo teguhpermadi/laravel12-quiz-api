@@ -5,48 +5,64 @@ namespace App\Policies;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class TeacherPolicy
 {
     use HandlesAuthorization;
-
-    public function allowRestify(User $user = null): bool
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return true;
+        return $user->can('viewAny-teacher');
     }
 
-    public function show(User $user = null, Teacher $model): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Teacher $teacher): bool
     {
-        return true;
+        return $user->can('view-teacher');
     }
 
-    public function store(User $user): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return true;
+        return $user->can('create-teacher');
     }
 
-    public function storeBulk(User $user): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Teacher $teacher): bool
     {
-        return true;
+        return $user->can('update-teacher');
     }
 
-    public function update(User $user, Teacher $model): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Teacher $teacher): bool
     {
-        return true;
+        return $user->can('delete-teacher');
     }
 
-    public function updateBulk(User $user, Teacher $model): bool
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, Teacher $teacher): bool
     {
-        return true;
+        return $user->can('restore-teacher');
     }
 
-    public function deleteBulk(User $user, Teacher $model): bool
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Teacher $teacher): bool
     {
-        return true;
-    }
-
-    public function delete(User $user, Teacher $model): bool
-    {
-        return true;
+        return $user->can('forceDelete-teacher');
     }
 }

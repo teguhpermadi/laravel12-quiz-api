@@ -14,8 +14,8 @@ return new class extends Migration
         $teams = config('permission.teams');
         $tableNames = config('permission.table_names');
         $columnNames = config('permission.column_names');
-        $pivotRole = $columnNames['role_pivot_key'] ?? 'role_id';
-        $pivotPermission = $columnNames['permission_pivot_key'] ?? 'permission_id';
+        $pivotRole = $columnNames['role_pivot_key'] ?? 'role_ulid';
+        $pivotPermission = $columnNames['permission_pivot_key'] ?? 'permission_ulid';
 
         if (empty($tableNames)) {
             throw new \Exception('Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');

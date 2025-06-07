@@ -2,127 +2,119 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AuthRequest;
-use App\Http\Resources\AuthResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     /**
-     * Register a new user
+     * Register a new user.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
      */
-    public function register(AuthRequest $request)
+    public function register(Request $request): JsonResponse
     {
+        // Validasi input dari request
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'device_name' => ['required', 'string', 'max:255'], // Diperlukan untuk Sanctum
+        ]);
+
+        // Buat user baru
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+        // Buat token API untuk user yang baru terdaftar
+        $token = $user->createToken($request->device_name)->plainTextToken;
+
         return response()->json([
-            'status' => 'success',
             'message' => 'User registered successfully',
-            'data' => new AuthResource($user)
-        ], 201);
+            'user' => $user,
+            'token' => $token,
+        ], 201); // Status 201 Created
     }
 
     /**
-     * Login user and create token
+     * Authenticate the user and generate an API token.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
      */
-    public function login(AuthRequest $request)
+    public function login(Request $request): JsonResponse
     {
-        if (!Auth::attempt($request->only(['email', 'password']))) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid credentials'
-            ], 401);
+        // Validasi input untuk login
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+            'device_name' => ['required', 'string', 'max:255'], // Diperlukan untuk Sanctum
+        ]);
+
+        // Cari user berdasarkan email
+        $user = User::where('email', $request->email)->first();
+
+        // Verifikasi kredensial (email dan password)
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Hapus token lama jika ada (opsional, tergantung kebutuhan)
+        // Ini akan memastikan setiap login baru mendapatkan token baru
+        // dan token lama untuk device_name yang sama dihapus.
+        $user->tokens()->where('name', $request->device_name)->delete();
+
+
+        // Buat token API baru untuk user
+        $token = $user->createToken($request->device_name)->plainTextToken;
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Logged in successfully',
-            'data' => [
-                'user' => new AuthResource($user),
-                'token' => $token
-            ]
-        ]);
+            'message' => 'Login successful',
+            'user' => $user,
+            'token' => $token,
+            'role' => $user->getRoleNames(),
+            'permission' => $user->getAllPermissions(),
+        ], 200); // Status 200 OK
     }
 
     /**
-     * Get authenticated user data
+     * Log the user out (revoke their API token).
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function getUser(Request $request)
+    public function logout(Request $request): JsonResponse
     {
-        return response()->json([
-            'status' => 'success',
-            'data' => new AuthResource($request->user())
-        ]);
-    }
-
-    /**
-     * Logout user (revoke token)
-     */
-    public function logout(Request $request)
-    {
+        // Hapus token yang saat ini digunakan oleh user
+        // Ini adalah token yang disertakan dalam header Authorization request saat ini
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Logged out successfully'
-        ]);
+            'message' => 'Successfully logged out'
+        ], 200);
     }
 
     /**
-     * Send password reset link
+     * Get the authenticated user's details.
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function forgotPassword(Request $request)
+    public function user(Request $request): JsonResponse
     {
-        $request->validate(['email' => 'required|email']);
-
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        return $status === Password::RESET_LINK_SENT
-            ? response()->json(['status' => 'success', 'message' => __($status)])
-            : response()->json(['status' => 'error', 'message' => __($status)], 400);
-    }
-
-    /**
-     * Reset password
-     */
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
-        ]);
-
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->setRememberToken(Str::random(60));
-
-                $user->save();
-
-                event(new PasswordReset($user));
-            }
-        );
-
-        return $status === Password::PASSWORD_RESET
-            ? response()->json(['status' => 'success', 'message' => __($status)])
-            : response()->json(['status' => 'error', 'message' => __($status)], 400);
+        // Mengembalikan data user yang sedang login
+        // User ini otomatis tersedia karena middleware 'auth:sanctum'
+        return response()->json($request->user());
     }
 }

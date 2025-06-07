@@ -1,10 +1,15 @@
-User::get()
-User::get()
-User::get()
-User::get()
+Permission::get()
 Role::get()
+Role::get()
+Permission::get()
+$role = Role::create(['name' => 'writer']);
+$permission = Permission::create(['name' => 'edit articles']);
+$role->givePermissionTo($permission);
+$permission->assignRole($role);
+Role::get()
+Role::where('name', 'writer')->first()
+Role::where('name', 'writer')->first()->permission
+Role::where('name', 'writer')->first()
+$admin = Role::where('name', 'admin')->first();
+        $admin->givePermissionTo('viewAny-teacher');
 User::get()
-User::find('01jx26dtcbgqr3c6dxjpr05e5m')->role
-User::find('01jx26dtcbgqr3c6dxjpr05e5m')->getRoleNames()
-User::find('01jx26dtcbgqr3c6dxjpr05e5m')->getRoleName()
-User::find('01jx26dtcbgqr3c6dxjpr05e5m')->getRoleNames()
