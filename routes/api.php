@@ -38,6 +38,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
         ->middleware('permission:delete-teacher');
 
+    // Route untuk menghapus beberapa guru secara bulk
+    Route::delete('/teachers/bulk-delete', [TeacherController::class, 'bulkDelete'])
+            ->middleware('permission:delete-teacher');
+
     // Route untuk mengembalikan guru yang dihapus secara soft (restore)
     Route::post('/teachers/{teacher}/restore', [TeacherController::class, 'restore'])
         ->middleware('permission:restore-teacher');
