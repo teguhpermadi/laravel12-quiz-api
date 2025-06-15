@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewTeacherAdded;
+use App\Exports\TeachersExport;
+use App\Exports\TeacherTemplateExport;
 use App\Http\Requests\TeacherRequest;
 use App\Http\Resources\TeacherResource;
+use App\Imports\TeachersImport;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Validation\ValidationException;
 
 class TeacherController extends Controller
 {
@@ -144,5 +150,59 @@ class TeacherController extends Controller
         Teacher::whereIn('id', $request->ids)->delete();
 
         return response()->json(['message' => 'Teachers deleted successfully'], 200);
+    }
+
+    public function export()
+    {
+        try {
+            return Excel::download(new TeachersExport, 'teachers.xlsx');
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal mengekspor data guru: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xls,xlsx|max:2048', // Batasi tipe file dan ukuran
+        ]);
+
+        try {
+            Excel::import(new TeachersImport, $request->file('file'));
+            return response()->json(['message' => 'Data guru berhasil diimpor.']);
+        } catch (ValidationException $e) {
+            // Tangani error validasi dari Maatwebsite/Excel
+            $failures = $e->failures();
+            // Format error untuk dikembalikan sebagai response`
+            $errors = [];
+            
+            foreach ($failures as $failure) {
+                $errors[] = [
+                    'row' => $failure->row(),
+                    'attribute' => $failure->attribute(),
+                    'errors' => $failure->errors(),
+                    'values' => $failure->values(),
+                ];
+            }
+            return response()->json(['message' => 'Impor gagal karena masalah validasi.', 'errors' => $errors], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal mengimpor data guru: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Download a blank Excel template for teacher import.
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     */
+    public function downloadTemplate()
+    {
+        try {
+            return Excel::download(new TeacherTemplateExport, 'teacher_import_template.xlsx');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Failed to download teacher import template: ' . $e->getMessage());
+            return response()->json(['message' => 'Gagal mengunduh template: ' . $e->getMessage()], 500);
+        }
     }
 }

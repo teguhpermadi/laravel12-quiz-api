@@ -22,6 +22,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/teachers', [TeacherController::class, 'index'])
         ->middleware('permission:viewAny-teacher');
 
+    // route untuk mengexport data guru
+    Route::get('/teachers/export', [TeacherController::class, 'export']);
+
+    // Route untuk mengimport data guru
+    Route::post('/teachers/import', [TeacherController::class, 'import']);
+
+    // Route untuk mengunduh template impor guru
+    Route::get('/teachers/template', [TeacherController::class, 'downloadTemplate']);
+
     // Route untuk menghapus beberapa guru secara bulk
     Route::delete('/teachers/bulk-delete', [TeacherController::class, 'bulkDelete'])
         ->middleware('permission:delete-teacher');
