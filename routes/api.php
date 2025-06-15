@@ -14,13 +14,17 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
-    
+
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
     Route::get('/user', [AuthController::class, 'getUser'])->middleware('auth:sanctum');
 
     // Route untuk mendapatkan semua guru (viewAny)
     Route::get('/teachers', [TeacherController::class, 'index'])
         ->middleware('permission:viewAny-teacher');
+
+    // Route untuk menghapus beberapa guru secara bulk
+    Route::delete('/teachers/bulk-delete', [TeacherController::class, 'bulkDelete'])
+        ->middleware('permission:delete-teacher');
 
     // Route untuk melihat detail guru (view)
     Route::get('/teachers/{teacher}', [TeacherController::class, 'show'])
@@ -37,10 +41,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route untuk menghapus guru (delete)
     Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])
         ->middleware('permission:delete-teacher');
-
-    // Route untuk menghapus beberapa guru secara bulk
-    Route::delete('/teachers/bulk-delete', [TeacherController::class, 'bulkDelete'])
-            ->middleware('permission:delete-teacher');
 
     // Route untuk mengembalikan guru yang dihapus secara soft (restore)
     Route::post('/teachers/{teacher}/restore', [TeacherController::class, 'restore'])

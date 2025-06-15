@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AuthResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -79,12 +80,13 @@ class AuthController extends Controller
         // Buat token API baru untuk user
         $token = $user->createToken($request->device_name)->plainTextToken;
 
+        // Eager load roles jika Anda ingin menggunakannya di UserResource dengan whenLoaded
+        $user->load('roles', 'permissions'); // Opsional, jika Anda ingin 'roles' di Resource
+
         return response()->json([
             'message' => 'Login successful',
-            'user' => $user,
+            'user' => new AuthResource($user), // Menggunakan AuthResource untuk format data user
             'token' => $token,
-            'role' => $user->getRoleNames(),
-            'permission' => $user->getAllPermissions(),
         ], 200); // Status 200 OK
     }
 

@@ -15,8 +15,14 @@ class AuthResource extends JsonResource
             'email' => $this->email,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'roles' => $this->getRoleNames(),
-            'permissions' => $this->getAllPermissions(),
+            // Tambahkan atribut lain yang ingin Anda sertakan (misal: created_at)
+            'roles' => $this->whenLoaded('roles', function () {
+                return $this->roles->pluck('name');
+            }),
+            'permissions' => $this->whenLoaded('permissions', function () {
+                // Pastikan Anda memuat relasi 'permissions' di controller jika ingin ini muncul
+                return $this->getAllPermissions()->pluck('name');
+            }),
         ];
     }
 }
