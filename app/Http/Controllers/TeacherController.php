@@ -9,7 +9,6 @@ use App\Http\Requests\TeacherRequest;
 use App\Http\Resources\TeacherResource;
 use App\Imports\TeacherImport;
 use App\Imports\TeacherTemplateValidation;
-use App\Imports\TemplateInfoSheetImport;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -141,7 +140,13 @@ class TeacherController extends Controller
         ]);
     }
 
-    // bulk delete
+    
+    /**
+     * Menghapus data guru dalam jumlah banyak
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function bulkDelete(Request $request)
     {
         $request->validate([
@@ -154,6 +159,11 @@ class TeacherController extends Controller
         return response()->json(['message' => 'Teachers deleted successfully'], 200);
     }
 
+    /**
+     * Download an Excel file containing all teachers data.
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\JsonResponse
+     */
     public function export()
     {
         try {
@@ -179,13 +189,6 @@ class TeacherController extends Controller
         }
     }
 
-    /**
-     * Mengimpor data guru dari file Excel.
-     * Menangani validasi template dan impor data dalam satu proses.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     /**
      * Mengimpor data guru dari file Excel.
      * Memisahkan validasi template dan impor data.
