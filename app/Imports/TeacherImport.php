@@ -89,14 +89,13 @@ class TeacherImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnF
 
     /**
      * Mendefinisikan aturan validasi untuk setiap baris.
-     * Hanya validasi untuk 'Jenis Kelamin (L/P)'.
      * @return array
      */
     public function rules(): array
     {
         return [
-            'nama_guru' => ['required', 'min:3', 'string', 'max:255'], // Dihapus sesuai permintaan "skip jika nama kosong"
-            'jenis_kelamin_lp' => ['required', 'string', 'in:male,female'],
+            'nama_guru' => ['required', 'min:3', 'string', 'max:255'],
+            'jenis_kelamin_lp' => ['required', 'string', 'in:L,P'],
         ];
     }
 
