@@ -7,13 +7,13 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithLimit;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use App\Exports\TeacherTemplateExport;
+use App\Exports\StudentTemplateExport;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Maatwebsite\Excel\Concerns\WithEvents;
 
-class TeacherTemplateValidation implements WithMultipleSheets
+class StudentTemplateValidation implements WithMultipleSheets
 {
     public $isValid = false;
     public $validationMessage = '';
@@ -36,7 +36,7 @@ class TeacherTemplateValidation implements WithMultipleSheets
         {
             private $parent;
 
-            public function __construct(TeacherTemplateValidation $parent)
+            public function __construct(StudentTemplateValidation $parent)
             {
                 $this->parent = $parent;
             }
@@ -46,7 +46,7 @@ class TeacherTemplateValidation implements WithMultipleSheets
                 $this->parent->templateCodeValidated = true;
                 // Log::info('TemplateValidation (TemplateInfoSheet): Collection diterima:', $collection->toArray());
 
-                $expectedTemplateCode = TeacherTemplateExport::TEMPLATE_CODE;
+                $expectedTemplateCode = StudentTemplateExport::TEMPLATE_CODE;
                 $currentTemplateCode = null;
 
                 if ($collection->isNotEmpty()) {
@@ -73,15 +73,15 @@ class TeacherTemplateValidation implements WithMultipleSheets
 
             public function limit(): int { return 5; }
             public function headingRow(): int { return 1; }
-            public function title(): string { return TeacherTemplateExport::TEMPLATE_INFO_SHEET_NAME; }
+            public function title(): string { return StudentTemplateExport::TEMPLATE_INFO_SHEET_NAME; }
         };
 
-        // --- SHEET 2: DataGuru (Validasi Header Kolom) ---
+        // --- SHEET 2: DataSiswa (Validasi Header Kolom) ---
         $sheets[] = new class($this) implements WithEvents, WithTitle, WithHeadingRow
         {
             private $parent;
 
-            public function __construct(TeacherTemplateValidation $parent)
+            public function __construct(StudentTemplateValidation $parent)
             {
                 $this->parent = $parent;
             }
@@ -94,7 +94,7 @@ class TeacherTemplateValidation implements WithMultipleSheets
                         $this->parent->dataHeadersValidated = true;
 
                         $expectedHeaders = [
-                            'Nama Guru',
+                            'Nama Siswa',
                             'Jenis Kelamin (L/P)',
                         ];
 
@@ -103,21 +103,21 @@ class TeacherTemplateValidation implements WithMultipleSheets
 
                         $actualHeadersInSheet = $sheet->rangeToArray('A1:' . $lastColLetterExpected . '1', null, true, false, false);
                         
-                        // Log::info('TemplateValidation (DataGuruSheet): Header yang dibaca dari A1:', $actualHeadersInSheet);
+                        // Log::info('TemplateValidation (DataSiswaSheet): Header yang dibaca dari A1:', $actualHeadersInSheet);
 
                         if (!empty($actualHeadersInSheet) && !empty($actualHeadersInSheet[0])) {
                             $foundHeaders = array_values($actualHeadersInSheet[0]);
                             
                             if ($foundHeaders === $expectedHeaders) {
                                 $this->parent->dataHeadersMatch = true;
-                                Log::info('TemplateValidation (DataGuruSheet): Header data COCOK.');
+                                Log::info('TemplateValidation (DataSiswaSheet): Header data COCOK.');
                             } else {
-                                $this->parent->validationMessage = 'Struktur header sheet DataGuru tidak sesuai dengan template resmi.';
-                                Log::warning('TemplateValidation (DataGuruSheet): Header data TIDAK COCOK.', ['found' => $foundHeaders, 'expected' => $expectedHeaders]);
+                                $this->parent->validationMessage = 'Struktur header sheet DataSiswa tidak sesuai dengan template resmi.';
+                                Log::warning('TemplateValidation (DataSiswaSheet): Header data TIDAK COCOK.', ['found' => $foundHeaders, 'expected' => $expectedHeaders]);
                             }
                         } else {
-                            $this->parent->validationMessage = 'Sheet DataGuru kosong atau tidak memiliki header yang valid.';
-                            Log::warning('TemplateValidation (DataGuruSheet): Sheet DataGuru kosong atau header tidak ditemukan.');
+                            $this->parent->validationMessage = 'Sheet DataSiswa kosong atau tidak memiliki header yang valid.';
+                            Log::warning('TemplateValidation (DataSiswaSheet): Sheet DataSiswa kosong atau header tidak ditemukan.');
                         }
                     },
                 ];
@@ -125,11 +125,11 @@ class TeacherTemplateValidation implements WithMultipleSheets
 
             public function collection(Collection $collection)
             {
-                Log::info('TemplateValidation (DataGuruSheet): Data baris diterima (setelah header validasi):', $collection->toArray());
+                Log::info('TemplateValidation (DataSiswaSheet): Data baris diterima (setelah header validasi):', $collection->toArray());
             }
 
             public function headingRow(): int { return 1; }
-            public function title(): string { return TeacherTemplateExport::DATA_SHEET_NAME; }
+            public function title(): string { return StudentTemplateExport::DATA_SHEET_NAME; }
         };
 
         return $sheets;
