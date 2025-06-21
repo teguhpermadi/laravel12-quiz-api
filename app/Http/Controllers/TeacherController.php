@@ -7,7 +7,9 @@ use App\Exports\TeachersExport;
 use App\Exports\TeacherTemplateExport;
 use App\Http\Requests\TeacherRequest;
 use App\Http\Resources\TeacherResource;
-use App\Imports\TeachersImport;
+use App\Imports\TeacherImport;
+use App\Imports\TeacherTemplateValidation;
+use App\Imports\TemplateInfoSheetImport;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -161,35 +163,6 @@ class TeacherController extends Controller
         }
     }
 
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:xls,xlsx|max:2048', // Batasi tipe file dan ukuran
-        ]);
-
-        try {
-            Excel::import(new TeachersImport, $request->file('file'));
-            return response()->json(['message' => 'Data guru berhasil diimpor.']);
-        } catch (ValidationException $e) {
-            // Tangani error validasi dari Maatwebsite/Excel
-            $failures = $e->failures();
-            // Format error untuk dikembalikan sebagai response`
-            $errors = [];
-            
-            foreach ($failures as $failure) {
-                $errors[] = [
-                    'row' => $failure->row(),
-                    'attribute' => $failure->attribute(),
-                    'errors' => $failure->errors(),
-                    'values' => $failure->values(),
-                ];
-            }
-            return response()->json(['message' => 'Impor gagal karena masalah validasi.', 'errors' => $errors], 422);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Gagal mengimpor data guru: ' . $e->getMessage()], 500);
-        }
-    }
-
     /**
      * Download a blank Excel template for teacher import.
      *
@@ -203,6 +176,76 @@ class TeacherController extends Controller
             // Log the error for debugging
             Log::error('Failed to download teacher import template: ' . $e->getMessage());
             return response()->json(['message' => 'Gagal mengunduh template: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Mengimpor data guru dari file Excel.
+     * Menangani validasi template dan impor data dalam satu proses.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    /**
+     * Mengimpor data guru dari file Excel.
+     * Memisahkan validasi template dan impor data.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function import(Request $request)
+    {
+        // Validasi dasar untuk file yang diunggah
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xls,xlsx', 'max:10240'], // Max 10MB
+        ]);
+
+        try {
+            // --- FASE 1: VALIDASI TEMPLATE ---
+            $templateValidator = new TeacherTemplateValidation();
+            
+            // PENTING: Panggil import untuk TeacherTemplateValidation.
+            // Karena TeacherTemplateValidation mengimplementasikan WithMultipleSheets,
+            // ia akan secara otomatis memproses semua sheets yang didefinisikannya (TemplateInfo & DataGuru).
+            Excel::import($templateValidator, $request->file('file')); // Tidak perlu selected_sheets jika WithMultipleSheets
+            
+            // Periksa hasil validasi template
+            if (!$templateValidator->isValid()) {
+                // Jika template tidak valid, kembalikan pesan error template
+                // HANYA mengandalkan getValidationMessage()
+                return response()->json([
+                    'message' => $templateValidator->getValidationMessage() ?: 'Impor gagal: File bukan template resmi atau ada masalah validasi.',
+                    // Array 'errors' dihilangkan karena TeacherTemplateValidation tidak lagi mengumpulkan kegagalan detail
+                ], 422);
+            }
+
+            // --- FASE 2: IMPOR DATA GURU (HANYA JIKA TEMPLATE VALID) ---
+            $dataImporter = new TeacherImport();
+
+            // PENTING: Panggil import untuk TeacherImport.
+            // Karena TeacherImport mengimplementasikan WithTitle, ia akan secara otomatis
+            // mencari dan memproses sheet DataGuru (sesuai dengan title() methodnya).
+            Excel::import($dataImporter, $request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX, [
+                'selected_sheets' => [TeacherTemplateExport::DATA_SHEET_NAME], // Pastikan hanya DataGuru sheet yang diimpor
+                'heading_row' => 1, // Heading untuk DataGuru ada di baris 1
+            ]);
+
+            // Jika semua berhasil
+            return response()->json([
+                'message' => 'Data guru berhasil diimpor! Total ' . $dataImporter->getImportedRowCount() . ' baris data berhasil.',
+                'imported_count' => $dataImporter->getImportedRowCount(),
+            ], 200);
+
+        } catch (ValidationException $e) {
+            // Tangani error validasi dari $request->validate() di awal (misal: file bukan excel, ukuran)
+            return response()->json([
+                'message' => $e->getMessage() ?: 'Kesalahan validasi file yang diunggah.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            // Tangani semua error lain yang tidak spesifik (misal: masalah baca file, koneksi DB)
+            Log::error('Error processing Excel file: ' . $e->getMessage(), ['exception' => $e, 'file' => $request->file('file')->getClientOriginalName()]);
+            return response()->json(['message' => 'Gagal memproses file Excel: ' . $e->getMessage()], 500);
         }
     }
 }

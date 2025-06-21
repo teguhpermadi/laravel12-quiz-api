@@ -1,15 +1,87 @@
-Permission::get()
-Role::get()
-Role::get()
-Permission::get()
-$role = Role::create(['name' => 'writer']);
-$permission = Permission::create(['name' => 'edit articles']);
-$role->givePermissionTo($permission);
-$permission->assignRole($role);
-Role::get()
-Role::where('name', 'writer')->first()
-Role::where('name', 'writer')->first()->permission
-Role::where('name', 'writer')->first()
-$admin = Role::where('name', 'admin')->first();
-        $admin->givePermissionTo('viewAny-teacher');
-User::get()
+new Teacher([
+            'name' => 'tes',
+            'gender' => 'male',
+        ]);
+Teacher::get()
+Teacher::get()->destroy()
+Teacher::get()->delete
+Teacher::get()
+return new Teacher([
+            'name' => 'tes',
+            'gender' => 'male',
+        ]);
+new Teacher([
+            'name' => 'tes',
+            'gender' => 'male',
+        ]);
+Teacher::lastes()->first()
+Teacher::lastest()->first();
+Teacher::latest()->first();
+Teacher::latest()->first();
+
+
+new Teacher([
+'name' => 'tes',
+  'male' => 'male',
+]);
+
+
+new Teacher([
+'name' => 'tes',
+  'gender' => 'male',
+]);
+Teacher::latest()->first();
+
+Teacher::latest()->first();
+
+Teacher::latest()->first();
+
+Teacher::latest()->first();
+
+Teacher::latest()->first();
+
+Teacher::latest()->first();
+
+Teacher::get()
+
+
+
+new Teacher([
+	'name' => 'tes',
+  	'gender' => 'male',
+]);
+
+
+return new Teacher([
+	'name' => 'tes',
+  	'gender' => 'male',
+]);
+Teacher::get();
+
+$teacher = new Teacher([
+    'name' => 'tes',
+    'gender' => 'L', 
+]);
+
+
+$teacher->save();
+Teacher::get();
+return new Teacher([
+            'name' => 'test',
+            'gender' => 'L',
+        ]);
+return new Teacher([
+            'name' => 'test',
+            'gender' => 'L',
+        ]);
+
+Teacher::get()
+return new Teacher([
+            'name' => 'test',
+            'gender' => 'L',
+        ]);
+
+Teacher::get();
+Teacher::get();
+Teacher::get();
+Teacher::get();

@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/teachers/template', [TeacherController::class, 'downloadTemplate']);
+// Route untuk mengimport data guru
+Route::post('/teachers/import', [TeacherController::class, 'import']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -25,11 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // route untuk mengexport data guru
     Route::get('/teachers/export', [TeacherController::class, 'export']);
 
-    // Route untuk mengimport data guru
-    Route::post('/teachers/import', [TeacherController::class, 'import']);
-
     // Route untuk mengunduh template impor guru
-    Route::get('/teachers/template', [TeacherController::class, 'downloadTemplate']);
 
     // Route untuk menghapus beberapa guru secara bulk
     Route::delete('/teachers/bulk-delete', [TeacherController::class, 'bulkDelete'])
