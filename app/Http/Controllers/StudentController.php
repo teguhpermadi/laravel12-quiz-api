@@ -71,9 +71,6 @@ class StudentController extends Controller
     {
         $student = Student::create($request->validated());
 
-        // Broadcast event after student is created
-        StudentCreated::dispatch($student);
-
         return response()->json([
             'status' => 'success',
             'message' => 'Student added successfully',
@@ -108,9 +105,6 @@ class StudentController extends Controller
     public function update(StudentRequest $request, Student $student)
     {
         $student->update($request->validated());
-
-        // Broadcast event after student is updated
-        StudentUpdated::dispatch($student);
         
         return response()->json([
             'status' => 'success',
@@ -125,9 +119,6 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         $student->delete();
-
-        // Broadcast event after student is deleted
-        StudentDeleted::dispatch($student);
         
         return response()->json([
             'status' => 'success',

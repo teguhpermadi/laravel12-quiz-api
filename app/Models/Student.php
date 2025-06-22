@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Events\StudentCreated;
+use App\Events\StudentDeleted;
+use App\Events\StudentUpdated;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +20,27 @@ class Student extends Model
         'nisn',
         'nis',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (Student $student) {
+            Log::info('DEBUG: Student model created event triggered.', ['student_id' => $student->id, 'name' => $student->name]);
+            event(new StudentCreated($student));
+        });
+
+        static::updated(function (Student $student) {
+            Log::info('DEBUG: Student model updated event triggered.', ['student_id' => $student->id, 'name' => $student->name, 'changes' => $student->getDirty()]);
+            $student->refresh();
+            event(new StudentUpdated($student));
+        });
+
+        static::deleted(function (Student $student) {
+            Log::info('DEBUG: Student model deleted event triggered.', ['student_id' => $student->id, 'name' => $student->name]);
+            event(new StudentDeleted($student->id));
+        });
+    }
 
     public static function allowedFilters()
     {
