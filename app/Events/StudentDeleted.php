@@ -15,14 +15,14 @@ class StudentDeleted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $student;
+    public $studentId;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Student $student)
+    public function __construct(string $studentId)
     {
-        $this->student = $student;
+        $this->studentId = $studentId;
     }
 
     /**
