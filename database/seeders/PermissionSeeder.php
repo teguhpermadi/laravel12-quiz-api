@@ -14,8 +14,9 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // teacher model permissions
+        // permissions
         $permissions = [
+            // teacher model permissions
             'viewAny-teacher',
             'view-teacher',
             'create-teacher',
@@ -23,6 +24,15 @@ class PermissionSeeder extends Seeder
             'delete-teacher',
             'restore-teacher',
             'forceDelete-teacher',
+
+            // student model permissions
+            'viewAny-student',
+            'view-student',
+            'create-student',
+            'update-student',
+            'delete-student',
+            'restore-student',
+            'forceDelete-student',
         ];
 
         // Buat permission jika belum ada
