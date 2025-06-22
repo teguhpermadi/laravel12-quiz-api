@@ -2,25 +2,27 @@
 
 namespace App\Events;
 
-use App\Models\Teacher; // Pastikan ini model Teacher Anda
+use App\Models\Teacher;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewTeacherAdded implements ShouldBroadcast
+class TeacherCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $teacher; // Properti yang akan dibroadcast
+    public $teacher; // Property to hold the teacher data
 
     /**
      * Create a new event instance.
      */
     public function __construct(Teacher $teacher)
     {
-        $this->teacher = $teacher;
+        $this->teacher = $teacher; // Assign the teacher data to the property
     }
 
     /**
@@ -30,7 +32,6 @@ class NewTeacherAdded implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        // Menyiarkan ke channel publik 'teachers'
         return [
             new Channel('teachers'),
         ];

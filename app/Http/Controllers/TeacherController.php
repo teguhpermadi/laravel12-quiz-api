@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewTeacherAdded;
+use App\Events\TeacherCreated;
+use App\Events\TeacherDeleted;
+use App\Events\TeacherUpdated;
 use App\Exports\TeachersExport;
 use App\Exports\TeacherTemplateExport;
 use App\Http\Requests\TeacherRequest;
@@ -76,7 +78,7 @@ class TeacherController extends Controller
         $teacher = Teacher::create($request->validated());
 
         // Broadcast event after teacher is created
-        NewTeacherAdded::dispatch($teacher);
+        TeacherCreated::dispatch($teacher);
 
         return response()->json([
             'status' => 'success',
@@ -120,6 +122,9 @@ class TeacherController extends Controller
     {
         $teacher->update($request->validated());
 
+        // Broadcast event after teacher is updated
+        TeacherUpdated::dispatch($teacher);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Teacher data updated successfully',
@@ -133,6 +138,9 @@ class TeacherController extends Controller
     public function destroy(Teacher $teacher)
     {
         $teacher->delete();
+
+        // Broadcast event after teacher is deleted
+        TeacherDeleted::dispatch($teacher);
 
         return response()->json([
             'status' => 'success',
