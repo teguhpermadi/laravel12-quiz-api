@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->nullableMorphs('userable');
+            $table->string('userable_id', 26)->nullable();   // Tipe string dengan panjang 26 untuk ULID
+            $table->string('userable_type')->nullable(); // Tipe string untuk nama kelas
+            $table->index(['userable_id', 'userable_type']);
         });
     }
 
@@ -22,7 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropMorphs('userable');
+            $table->dropIndex(['userable_id', 'userable_type']); // Drop index
+            $table->dropColumn(['userable_id', 'userable_type']); // Drop kolom
         });
     }
 };

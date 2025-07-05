@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\UserLinkingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,29 +28,23 @@ Route::middleware('auth:sanctum')->group(function () {
         // route untuk mengexport data guru
         Route::get('/export', [TeacherController::class, 'export']);
         // Route untuk menghapus beberapa guru secara bulk
-        Route::delete('/bulk-delete', [TeacherController::class, 'bulkDelete'])
-            ->middleware('permission:delete-teacher');
+        Route::delete('/bulk-delete', [TeacherController::class, 'bulkDelete'])->middleware('permission:delete-teacher');
+            // Route untuk admin/user berwenang untuk menghasilkan token
+        Route::post('/{teacher}/generate-link-token', [UserLinkingController::class, 'generateTeacherLinkToken']);
         // Route untuk mendapatkan daftar guru dengan filter, sorting, dan pagination
-        Route::get('/', [TeacherController::class, 'index'])
-            ->middleware('permission:viewAny-teacher');
+        Route::get('/', [TeacherController::class, 'index'])->middleware('permission:viewAny-teacher');
         // Route untuk melihat detail guru (view)
-        Route::get('/{teacher}', [TeacherController::class, 'show'])
-            ->middleware('permission:view-teacher');
+        Route::get('/{teacher}', [TeacherController::class, 'show'])->middleware('permission:view-teacher');
         // Route untuk membuat guru baru (create)
-        Route::post('/', [TeacherController::class, 'store'])
-            ->middleware('permission:create-teacher');
+        Route::post('/', [TeacherController::class, 'store'])->middleware('permission:create-teacher');
         // Route untuk mengupdate guru (update)
-        Route::put('/{teacher}', [TeacherController::class, 'update'])
-            ->middleware('permission:update-teacher');
+        Route::put('/{teacher}', [TeacherController::class, 'update'])->middleware('permission:update-teacher');
         // Route untuk menghapus guru (delete)
-        Route::delete('/{teacher}', [TeacherController::class, 'destroy'])
-            ->middleware('permission:delete-teacher');
+        Route::delete('/{teacher}', [TeacherController::class, 'destroy'])->middleware('permission:delete-teacher');
         // Route untuk mengembalikan guru yang dihapus secara soft (restore)
-        Route::post('/{teacher}/restore', [TeacherController::class, 'restore'])
-            ->middleware('permission:restore-teacher');
+        Route::post('/{teacher}/restore', [TeacherController::class, 'restore'])->middleware('permission:restore-teacher');
         // Route untuk menghapus guru secara permanen (forceDelete)
-        Route::delete('/{teacher}/force-delete', [TeacherController::class, 'forceDelete'])
-            ->middleware('permission:forceDelete-teacher');
+        Route::delete('/{teacher}/force-delete', [TeacherController::class, 'forceDelete'])->middleware('permission:forceDelete-teacher');
     });
 
     // Route Students prefix
@@ -61,29 +56,25 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route untuk mengexport data siswa
         Route::get('/export', [StudentController::class, 'export']);
         // Route untuk menghapus beberapa siswa secara bulk
-        Route::delete('/bulk-delete', [StudentController::class, 'bulkDelete'])
-            ->middleware('permission:delete-student');
+        Route::delete('/bulk-delete', [StudentController::class, 'bulkDelete'])->middleware('permission:delete-student');
         // Route untuk mendapatkan daftar siswa dengan filter, sorting, dan pagination
-        Route::get('/', [StudentController::class, 'index'])
-            ->middleware('permission:viewAny-student');
+        Route::get('/', [StudentController::class, 'index'])->middleware('permission:viewAny-student');
         // Route untuk melihat detail siswa (view)
         Route::get('/{student}', [StudentController::class, 'show']);
         // Route untuk membuat siswa baru (create)
-        Route::post('/', [StudentController::class, 'store'])
-            ->middleware('permission:create-student');
+        Route::post('/', [StudentController::class, 'store'])->middleware('permission:create-student');
         // Route untuk mengupdate siswa (update)
-        Route::put('/{student}', [StudentController::class, 'update'])
-            ->middleware('permission:update-student');
+        Route::put('/{student}', [StudentController::class, 'update'])->middleware('permission:update-student');
         // Route untuk menghapus siswa (delete)
-        Route::delete('/{student}', [StudentController::class, 'destroy'])
-            ->middleware('permission:delete-student');
+        Route::delete('/{student}', [StudentController::class, 'destroy'])->middleware('permission:delete-student');
         // Route untuk mengembalikan siswa yang dihapus secara soft (restore)
-        Route::post('/{student}/restore', [StudentController::class, 'restore'])
-            ->middleware('permission:restore-student');
+        Route::post('/{student}/restore', [StudentController::class, 'restore'])->middleware('permission:restore-student');
         // Route untuk menghapus siswa secara permanen (forceDelete)
-        Route::delete('/{student}/force-delete', [StudentController::class, 'forceDelete'])
-            ->middleware('permission:forceDelete-student');
+        Route::delete('/{student}/force-delete', [StudentController::class, 'forceDelete'])->middleware('permission:forceDelete-student');
     });
+    // Route untuk user yang sedang login untuk menautkan akunnya
+    // Ini adalah route yang akan diakses oleh link di frontend
+    Route::post('link/teacher-account', [UserLinkingController::class, 'linkTeacherAccount']);
 });
 
 Route::apiResource('questions', \App\Http\Controllers\QuestionController::class);

@@ -8,6 +8,7 @@ use App\Events\TeacherUpdated;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -68,7 +69,7 @@ class Teacher extends Model
 
     public static function allowedIncludes()
     {
-        return ['subjects', 'subjects.subject', 'subjects.academicYear'];
+        return ['subjects', 'subjects.subject', 'subjects.academicYear', 'user'];
     }
 
     public function getNipAttribute($value)
@@ -92,5 +93,10 @@ class Teacher extends Model
     public function user(): MorphOne
     {
         return $this->morphOne(User::class, 'userable');
+    }
+
+    public function linkTokens(): HasMany
+    {
+        return $this->hasMany(TeacherLinkToken::class);
     }
 }
