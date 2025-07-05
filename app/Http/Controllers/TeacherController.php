@@ -7,7 +7,8 @@ use App\Events\TeacherDeleted;
 use App\Events\TeacherUpdated;
 use App\Exports\TeachersExport;
 use App\Exports\TeacherTemplateExport;
-use App\Http\Requests\TeacherRequest;
+use App\Http\Requests\TeacherCreateRequest;
+use App\Http\Requests\TeacherUpdateRequest;
 use App\Http\Resources\TeacherResource;
 use App\Imports\TeacherImport;
 use App\Imports\TeacherTemplateValidation;
@@ -73,7 +74,7 @@ class TeacherController extends Controller
     /**
      * Menyimpan guru baru
      */
-    public function store(TeacherRequest $request)
+    public function store(TeacherCreateRequest $request)
     {
         $teacher = Teacher::create($request->validated());
 
@@ -115,7 +116,7 @@ class TeacherController extends Controller
     /**
      * Memperbarui data guru
      */
-    public function update(TeacherRequest $request, Teacher $teacher)
+    public function update(TeacherUpdateRequest $request, Teacher $teacher)
     {
         $teacher->update($request->validated());
 

@@ -8,7 +8,8 @@ use App\Events\StudentDeleted;
 use App\Events\StudentUpdated;
 use App\Exports\StudentsExport;
 use App\Exports\StudentTemplateExport;
-use App\Http\Requests\StudentRequest;
+use App\Http\Requests\StudentCreateRequest;
+use App\Http\Requests\StudentUpdateRequest;
 use App\Http\Resources\StudentResource;
 use App\Imports\StudentImport;
 use App\Imports\StudentTemplateValidation;
@@ -67,7 +68,7 @@ class StudentController extends Controller
     /**
      * Menyimpan siswa baru
      */
-    public function store(StudentRequest $request)
+    public function store(StudentCreateRequest $request)
     {
         $student = Student::create($request->validated());
 
@@ -102,7 +103,7 @@ class StudentController extends Controller
     /**
      * Memperbarui data siswa
      */
-    public function update(StudentRequest $request, Student $student)
+    public function update(StudentUpdateRequest $request, Student $student)
     {
         $student->update($request->validated());
         
