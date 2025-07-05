@@ -13,6 +13,7 @@ class TeacherResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'gender' => $this->gender,
+            'nip' => $this->nip,
             'subject_count' => $this->when(isset($this->subject_count), $this->subject_count),
             'subjects' => $this->when($this->relationLoaded('subjects'), function() {
                 return TeacherSubjectResource::collection($this->subjects);
