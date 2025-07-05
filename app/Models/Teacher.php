@@ -8,6 +8,7 @@ use App\Events\TeacherUpdated;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -86,5 +87,10 @@ class Teacher extends Model
     {
         return $this->subjects()->where('academic_year_id', $academicYearId)
             ->with(['subject', 'academicYear']);
+    }
+
+    public function user(): MorphOne
+    {
+        return $this->morphOne(User::class, 'userable');
     }
 }
