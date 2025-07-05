@@ -19,6 +19,7 @@ class TeacherFactory extends Factory
         return [
             'name' => fake()->name(),
             'gender' => \fake()->randomElement(['male', 'female']),
+            'nip' => fake()->unique()->numerify('##################'), // 18 digit NIP
         ];
     }
 }

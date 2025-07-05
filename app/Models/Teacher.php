@@ -19,6 +19,7 @@ class Teacher extends Model
     protected $fillable = [
         'name',
         'gender',
+        'nip',
     ];
 
     protected static function boot()
@@ -48,17 +49,30 @@ class Teacher extends Model
             AllowedFilter::exact('id'),
             'name',
             'gender',
+            'nip',
         ];
     }
 
     public static function allowedSorts()
     {
-        return ['id', 'name', 'gender', 'created_at', 'updated_at'];
+        return [
+            'id', 
+            'name', 
+            'gender', 
+            'nip', 
+            'created_at', 
+            'updated_at'
+        ];
     }
 
     public static function allowedIncludes()
     {
         return ['subjects', 'subjects.subject', 'subjects.academicYear'];
+    }
+
+    public function getNipAttribute($value)
+    {
+        return $value ?: '-';
     }
 
     // Relasi ke TeacherSubject

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TeacherUpdateRequest extends FormRequest
 {
@@ -21,24 +22,25 @@ class TeacherUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $teacherId = $this->route('teacher')->id; // Asumsi route model binding {teacher}
+        
         return [
             'name' => ['sometimes', 'string', 'min:3', 'max:255'],
             'gender' => ['sometimes', 'in:male,female'], // Menggunakan 'male' dan 'female'
-            // Jika Anda memiliki kolom unik seperti NIP:
-            // 'nip' => [
-            //     'sometimes',
-            //     'string',
-            //     Rule::unique('teachers', 'nip')->ignore($teacherId, 'id'),
-            // ],
+            'nip' => [
+                'sometimes',
+                'string',
+                Rule::unique('teachers', 'nip')->ignore($teacherId, 'id'),
+            ],
         ];
     }
-
+    
     public function messages(): array
     {
         return [
             'name.min' => 'Nama guru minimal 3 karakter.',
             'gender.in' => 'Jenis kelamin tidak valid. Harus "male" atau "female".',
-            // 'nip.unique' => 'NIP ini sudah digunakan oleh guru lain.', // Jika ada NIP
+            'nip.unique' => 'NIP ini sudah digunakan oleh guru lain.', // Jika ada NIP
         ];
     }
 }

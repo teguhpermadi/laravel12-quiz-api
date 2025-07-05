@@ -24,6 +24,7 @@ class TeacherCreateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:3', 'max:255'],
             'gender' => ['required', 'in:male,female'],
+            'nip' => ['nullable', 'string', 'max:20', 'unique:teachers,nip'],
         ];
     }
 }
