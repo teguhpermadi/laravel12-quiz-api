@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/export', [TeacherController::class, 'export']);
         // Route untuk menghapus beberapa guru secara bulk
         Route::delete('/bulk-delete', [TeacherController::class, 'bulkDelete'])->middleware('permission:delete-teacher');
+        // Route untuk mendapatkan status token link guru
+        Route::get('/{teacher}/link-token-status', [TeacherController::class, 'getLinkTokenStatus']);
         // Route untuk mendapatkan daftar guru dengan filter, sorting, dan pagination
         Route::get('/', [TeacherController::class, 'index'])->middleware('permission:viewAny-teacher');
         // Route untuk melihat detail guru (view)

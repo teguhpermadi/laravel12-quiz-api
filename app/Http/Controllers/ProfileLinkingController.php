@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProfileLinkedEvent;
 use App\Models\Teacher; // Impor model Teacher
 use App\Models\Student; // Impor model Student
 use App\Models\ProfileLinkToken; // Impor model ProfileLinkToken
@@ -154,6 +155,9 @@ class ProfileLinkingController extends Controller
             $linkToken->update(['used_at' => Carbon::now()]);
 
             DB::commit();
+
+            // NEW: Panggil event ProfileLinked setelah berhasil menautkan
+            event(new ProfileLinkedEvent($profile->id, $profile->getMorphClass()));
 
             return response()->json([
                 'message' => 'Akun user berhasil ditautkan dengan profil!',

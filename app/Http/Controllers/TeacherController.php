@@ -31,7 +31,8 @@ class TeacherController extends Controller
         $query = QueryBuilder::for(Teacher::class)
             ->allowedFilters(Teacher::allowedFilters())
             ->allowedSorts(Teacher::allowedSorts())
-            ->allowedIncludes(Teacher::allowedIncludes());
+            ->allowedIncludes(Teacher::allowedIncludes())
+            ->with(['user', 'profileLinkTokens']);
 
         // Jika ada parameter academic_year_id, load subjects berdasarkan tahun akademik
         if ($academicYearId) {
@@ -81,7 +82,7 @@ class TeacherController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Teacher added successfully',
-            'data' => new TeacherResource($teacher)
+            'data' => new TeacherResource($teacher->load('user', 'profileLinkTokens'))
         ], 201);
     }
 
@@ -109,7 +110,7 @@ class TeacherController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => new TeacherResource($teacher)
+            'data' => new TeacherResource($teacher->load('user', 'profileLinkTokens'))
         ]);
     }
 
@@ -123,7 +124,7 @@ class TeacherController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Teacher data updated successfully',
-            'data' => new TeacherResource($teacher)
+            'data' => new TeacherResource($teacher->load('user', 'profileLinkTokens'))
         ]);
     }
 

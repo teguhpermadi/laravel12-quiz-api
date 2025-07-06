@@ -70,7 +70,7 @@ class Teacher extends Model
 
     public static function allowedIncludes()
     {
-        return ['subjects', 'subjects.subject', 'subjects.academicYear', 'user'];
+        return ['subjects', 'subjects.subject', 'subjects.academicYear', 'user', 'profileLinkTokens'];
     }
 
     public function getNipAttribute($value)
