@@ -4,7 +4,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileLinkingController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\UserLinkingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -70,8 +69,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{student}/restore', [StudentController::class, 'restore'])->middleware('permission:restore-student');
         // Route untuk menghapus siswa secara permanen (forceDelete)
         Route::delete('/{student}/force-delete', [StudentController::class, 'forceDelete'])->middleware('permission:forceDelete-student');
+    });
 
-        // --- NEW: Routes untuk Profile Linking ---
+    // --- NEW: Routes untuk Profile Linking ---
     // Route untuk admin/user berwenang untuk menghasilkan token
     // Menggunakan POST karena ini adalah aksi yang mengubah state (membuat token)
     Route::post('link-tokens/generate/{type}/{id}', [ProfileLinkingController::class, 'generateLinkToken']);
@@ -80,6 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Token diambil dari request body
     Route::post('link-profile', [ProfileLinkingController::class, 'linkProfileAccount']);
 });
+
 
 Route::apiResource('questions', \App\Http\Controllers\QuestionController::class);
 Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class);

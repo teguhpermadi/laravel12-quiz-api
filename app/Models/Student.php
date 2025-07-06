@@ -64,7 +64,12 @@ class Student extends Model
 
     public static function allowedIncludes()
     {
-        return ['grades', 'grades.grade', 'grades.academicYear'];
+        return [
+            'grades', 
+            'grades.grade', 
+            'grades.academicYear', 
+            'user'
+        ];
     }
     
     // Relasi ke StudentGrade
