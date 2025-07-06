@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'updated_at' => $this->updated_at,
             'userable_id' => $this->userable_id,
             'userable_type' => $this->userable_type,
+            'userable' => $this->whenLoaded('userable'), // Ini penting!
             'roles' => $this->whenLoaded('roles', function () {
                 return $this->roles->pluck('name');
             }),

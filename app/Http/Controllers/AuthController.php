@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AuthResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -108,15 +109,14 @@ class AuthController extends Controller
     }
 
     /**
-     * Get the authenticated user's details.
+     * Dapatkan detail user yang sedang login.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @return \App\Http\Resources\UserResource
      */
-    public function user(Request $request): JsonResponse
+    public function me(Request $request): UserResource
     {
-        // Mengembalikan data user yang sedang login
-        // User ini otomatis tersedia karena middleware 'auth:sanctum'
-        return response()->json($request->user());
+        // Memuat relasi 'userable' agar data Teacher/Student juga ikut terambil
+        return new UserResource($request->user()->load('userable'));
     }
 }

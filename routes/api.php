@@ -17,8 +17,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
-    Route::get('/user', [AuthController::class, 'getUser'])->middleware('auth:sanctum');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/user', [AuthController::class, 'me']);
 
     // Route Teachers prefix
     Route::prefix('teachers')->group(function () {
@@ -79,12 +79,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route untuk user yang sedang login untuk menautkan akunnya
     // Token diambil dari request body
     Route::post('link-profile', [ProfileLinkingController::class, 'linkProfileAccount']);
-
-    // Route untuk mendapatkan data user yang sedang login beserta userable-nya
-    Route::get('/user', function (Request $request) {
-        // Pastikan relasi userable dimuat
-        return $request->user()->load('userable');
-    });
 });
 
 Route::apiResource('questions', \App\Http\Controllers\QuestionController::class);
