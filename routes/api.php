@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileLinkingController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserLinkingController;
@@ -29,8 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/export', [TeacherController::class, 'export']);
         // Route untuk menghapus beberapa guru secara bulk
         Route::delete('/bulk-delete', [TeacherController::class, 'bulkDelete'])->middleware('permission:delete-teacher');
-            // Route untuk admin/user berwenang untuk menghasilkan token
-        Route::post('/{teacher}/generate-link-token', [UserLinkingController::class, 'generateTeacherLinkToken']);
         // Route untuk mendapatkan daftar guru dengan filter, sorting, dan pagination
         Route::get('/', [TeacherController::class, 'index'])->middleware('permission:viewAny-teacher');
         // Route untuk melihat detail guru (view)
@@ -71,10 +70,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{student}/restore', [StudentController::class, 'restore'])->middleware('permission:restore-student');
         // Route untuk menghapus siswa secara permanen (forceDelete)
         Route::delete('/{student}/force-delete', [StudentController::class, 'forceDelete'])->middleware('permission:forceDelete-student');
-    });
+
+        // --- NEW: Routes untuk Profile Linking ---
+    // Route untuk admin/user berwenang untuk menghasilkan token
+    // Menggunakan POST karena ini adalah aksi yang mengubah state (membuat token)
+    Route::post('link-tokens/generate/{type}/{id}', [ProfileLinkingController::class, 'generateLinkToken']);
+
     // Route untuk user yang sedang login untuk menautkan akunnya
-    // Ini adalah route yang akan diakses oleh link di frontend
-    Route::post('link/teacher-account', [UserLinkingController::class, 'linkTeacherAccount']);
+    // Token diambil dari request body
+    Route::post('link-profile', [ProfileLinkingController::class, 'linkProfileAccount']);
+
+    // Route untuk mendapatkan data user yang sedang login beserta userable-nya
+    Route::get('/user', function (Request $request) {
+        // Pastikan relasi userable dimuat
+        return $request->user()->load('userable');
+    });
 });
 
 Route::apiResource('questions', \App\Http\Controllers\QuestionController::class);

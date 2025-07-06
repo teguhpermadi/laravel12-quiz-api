@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo; // Impor MorphTo
 
-class TeacherLinkToken extends Model
+class ProfileLinkToken extends Model
 {
     use HasFactory, HasUlids;
-    
+
     protected $fillable = [
-        'teacher_id',
+        'linkable_id',
+        'linkable_type',
         'token',
         'expires_at',
         'used_at',
@@ -24,11 +25,11 @@ class TeacherLinkToken extends Model
     ];
 
     /**
-     * Dapatkan guru yang terkait dengan token ini.
+     * Dapatkan model induk yang menjadi pemilik token ini (Teacher atau Student).
      */
-    public function teacher(): BelongsTo
+    public function linkable(): MorphTo
     {
-        return $this->belongsTo(Teacher::class);
+        return $this->morphTo();
     }
 
     /**

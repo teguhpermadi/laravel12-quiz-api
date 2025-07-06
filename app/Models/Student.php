@@ -8,6 +8,8 @@ use App\Events\StudentUpdated;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -81,5 +83,13 @@ class Student extends Model
     public function user(): MorphOne
     {
         return $this->morphOne(User::class, 'userable');
+    }
+
+    /**
+     * Dapatkan semua token link yang terkait dengan guru ini.
+     */
+    public function profileLinkTokens(): MorphMany // Ubah nama metode dari linkTokens()
+    {
+        return $this->morphMany(ProfileLinkToken::class, 'linkable');
     }
 }
