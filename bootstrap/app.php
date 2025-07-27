@@ -4,6 +4,8 @@ use App\Http\Middleware\ProcessApiQueryParameters;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\JsonResponse;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,5 +23,14 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Tambahkan ini untuk menangani UnauthorizedException
+        $exceptions->renderable(function (UnauthorizedException $e, $request) {
+            if ($request->is('api/*')) { // Hanya untuk request API
+                return new JsonResponse([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                    'code' => 403 // Kode status kustom jika Anda mau
+                ], 403);
+            }
+        });
     })->create();
