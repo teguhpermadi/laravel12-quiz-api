@@ -32,7 +32,8 @@ class StudentController extends Controller
         $query = QueryBuilder::for(Student::class)
             ->allowedFilters(Student::allowedFilters())
             ->allowedSorts(Student::allowedSorts())
-            ->allowedIncludes(Student::allowedIncludes());
+            ->allowedIncludes(Student::allowedIncludes())
+            ->with(['user', 'profileLinkTokens']);
             
         // Jika ada parameter academic_year_id, load grades berdasarkan tahun akademik
         if ($academicYearId) {
