@@ -1,3 +1,84 @@
-Teacher::get();
-Teacher::get();
-Teacher::get();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+$students = Student::studentsWithoutGrades($academicYearId);
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+$students = Student::studentsWithoutGrades($academicYearId);
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+$students = Student::studentsWithoutGrades($academicYearId);
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+Student::all()
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+Student::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+Student::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+Student::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+Student::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+$academicYearId = 01jzen1w7cc2wb24hss26w1ed3;
+
+User::all();
+
+
+User::all();
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::studentsWithoutGrades($academicYearId);
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::studentsWithoutGrades($academicYearId)->paginate();
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::paginate()->studentsWithoutGrades($academicYearId);
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::studentsWithoutGrades($academicYearId);
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::get()->paginate()
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::get()->paginate(5)
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::get()->paginate(5)
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::all()->paginate(5)
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::paginate(5)
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::paginate(5)->get()
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::paginate(5)
+$academicYearId = '01jzen1w7cc2wb24hss26w1ed3';
+$students = Student::paginate(15)

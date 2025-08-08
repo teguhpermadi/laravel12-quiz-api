@@ -239,4 +239,41 @@ class StudentController extends Controller
             return response()->json(['message' => 'Gagal memproses file Excel: ' . $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Menampilkan daftar siswa yang tidak memiliki grade berdasarkan tahun akademik
+     */
+    public function studentsWithoutGrades(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'academic_year_id' => 'required|ulid',
+        ]);
+
+        $academicYearId = $request->input('academic_year_id');
+
+        // Membangun query dengan pagination
+        $students = Student::whereDoesntHave('grades', function ($query) use ($academicYearId) {
+            $query->where('academic_year_id', $academicYearId);
+        })->paginate($request->input('per_page', 15));
+
+        return response()->json([
+            'status' => 'success',
+            'data' => StudentResource::collection($students),
+            'meta' => [
+                'current_page' => $students->currentPage(),
+                'from' => $students->firstItem(),
+                'last_page' => $students->lastPage(),
+                'per_page' => $students->perPage(),
+                'to' => $students->lastItem(),
+                'total' => $students->total(),
+            ],
+            'links' => [
+                'first' => $students->url(1),
+                'last' => $students->url($students->lastPage()),
+                'prev' => $students->previousPageUrl(),
+                'next' => $students->nextPageUrl(),
+            ],
+        ]);
+    }
 }
