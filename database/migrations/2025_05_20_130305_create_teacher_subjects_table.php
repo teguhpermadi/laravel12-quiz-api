@@ -16,9 +16,10 @@ return new class extends Migration
             $table->foreignUlid('academic_year_id')->constrained()->cascadeOnDelete();
             $table->foreignUlid('teacher_id')->constrained()->cascadeOnDelete();
             $table->foreignUlid('subject_id')->constrained()->cascadeOnDelete();
+            $table->foreignUlid('grade_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['academic_year_id', 'teacher_id', 'subject_id'], 'teacher_subjects_unique');
+            $table->unique(['academic_year_id', 'teacher_id', 'subject_id', 'grade_id'], 'teacher_subjects_unique');
         });
     }
 

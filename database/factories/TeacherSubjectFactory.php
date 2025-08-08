@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\AcademicYear;
+use App\Models\Grade;
 use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,6 +24,7 @@ class TeacherSubjectFactory extends Factory
             'academic_year_id' => AcademicYear::get()->random()->id,
             'teacher_id' => Teacher::get()->random()->id,
             'subject_id' => Subject::get()->random()->id,
+            'grade_id' => Grade::get()->random()->id,
         ];
     }
 }

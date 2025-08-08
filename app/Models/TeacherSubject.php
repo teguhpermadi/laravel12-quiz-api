@@ -16,7 +16,28 @@ class TeacherSubject extends Model
         'academic_year_id',
         'teacher_id',
         'subject_id',
+        'grade_id',
     ];
+
+    public static function allowedFilters()
+    {
+        return [
+            AllowedFilter::exact('id'),
+            AllowedFilter::exact('academic_year_id'),
+            AllowedFilter::exact('teacher_id'),
+            AllowedFilter::exact('subject_id'),
+        ];
+    }
+    
+    public static function allowedSorts()
+    {
+        return ['id', 'academic_year_id', 'teacher_id', 'subject_id', 'grade_id', 'created_at', 'updated_at'];
+    }
+    
+    public static function allowedIncludes()
+    {
+        return ['academicYear', 'teacher', 'subject', 'grade'];
+    }
 
     public function academicYear()
     {
@@ -33,23 +54,8 @@ class TeacherSubject extends Model
         return $this->belongsTo(Subject::class);
     }
     
-    public static function allowedFilters()
+    public function grade()
     {
-        return [
-            AllowedFilter::exact('id'),
-            AllowedFilter::exact('academic_year_id'),
-            AllowedFilter::exact('teacher_id'),
-            AllowedFilter::exact('subject_id'),
-        ];
-    }
-    
-    public static function allowedSorts()
-    {
-        return ['id', 'academic_year_id', 'teacher_id', 'subject_id', 'created_at', 'updated_at'];
-    }
-    
-    public static function allowedIncludes()
-    {
-        return ['academicYear', 'teacher', 'subject'];
+        return $this->belongsTo(Grade::class);
     }
 }
