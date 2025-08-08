@@ -14,6 +14,7 @@ class TeacherSubjectResource extends JsonResource
             'academic_year_id' => $this->academic_year_id,
             'teacher_id' => $this->teacher_id,
             'subject_id' => $this->subject_id,
+            'grade_id' => $this->grade_id,
             'academic_year' => $this->whenLoaded('academicYear', function() {
                 return new AcademicYearResource($this->academicYear);
             }),
@@ -22,6 +23,9 @@ class TeacherSubjectResource extends JsonResource
             }),
             'subject' => $this->whenLoaded('subject', function() {
                 return new SubjectResource($this->subject);
+            }),
+            'grade' => $this->whenLoaded('grade', function() {
+                return new GradeResource($this->grade);
             }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

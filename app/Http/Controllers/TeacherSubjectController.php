@@ -19,6 +19,7 @@ class TeacherSubjectController extends Controller
             ->allowedFilters(TeacherSubject::allowedFilters())
             ->allowedSorts(TeacherSubject::allowedSorts())
             ->allowedIncludes(TeacherSubject::allowedIncludes())
+            ->with(['academicYear', 'teacher.profileLinkTokens', 'subject', 'grade'])
             ->paginate($request->input('per_page', 15))
             ->appends($request->query());
         
@@ -48,6 +49,9 @@ class TeacherSubjectController extends Controller
     public function store(TeacherSubjectRequest $request)
     {
         $teacherSubject = TeacherSubject::create($request->validated());
+
+        // Pastikan relasi 'teacher' dan 'profileLinkTokens' dimuat
+        $teacherSubject->load(['teacher.profileLinkTokens']);
         
         return response()->json([
             'status' => 'success',
@@ -61,6 +65,9 @@ class TeacherSubjectController extends Controller
      */
     public function show(TeacherSubject $teacherSubject)
     {
+        // Pastikan relasi 'teacher' dan 'profileLinkTokens' dimuat
+        $teacherSubject->load(['teacher.profileLinkTokens']);
+
         return response()->json([
             'status' => 'success',
             'data' => new TeacherSubjectResource($teacherSubject)
@@ -74,6 +81,9 @@ class TeacherSubjectController extends Controller
     {
         $teacherSubject->update($request->validated());
         
+        // Pastikan relasi 'teacher' dan 'profileLinkTokens' dimuat
+        $teacherSubject->load(['teacher.profileLinkTokens']);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Teacher Subject data updated successfully',
