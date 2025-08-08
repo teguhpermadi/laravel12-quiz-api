@@ -19,6 +19,11 @@ class StudentGradeController extends Controller
             ->allowedFilters(StudentGrade::allowedFilters())
             ->allowedSorts(StudentGrade::allowedSorts())
             ->allowedIncludes(StudentGrade::allowedIncludes())
+            ->with([
+                'academicYear',
+                'student',
+                'grade',
+            ])
             ->paginate($request->input('per_page', 15))
             ->appends($request->query());
         
@@ -49,6 +54,9 @@ class StudentGradeController extends Controller
     {
         $studentGrade = StudentGrade::create($request->validated());
         
+        // Pastikan relasi 'academicYear', 'student', dan 'grade' dimuat
+        $studentGrade->load(['academicYear', 'student', 'grade']);
+        
         return response()->json([
             'status' => 'success',
             'message' => 'Student Grade added successfully',
@@ -61,6 +69,9 @@ class StudentGradeController extends Controller
      */
     public function show(StudentGrade $studentGrade)
     {
+        // Pastikan relasi 'academicYear', 'student', dan 'grade' dimuat
+        $studentGrade->load(['academicYear', 'student', 'grade']);
+
         return response()->json([
             'status' => 'success',
             'data' => new StudentGradeResource($studentGrade)
@@ -73,6 +84,9 @@ class StudentGradeController extends Controller
     public function update(StudentGradeRequest $request, StudentGrade $studentGrade)
     {
         $studentGrade->update($request->validated());
+
+        // Pastikan relasi 'academicYear', 'student', dan 'grade' dimuat
+        $studentGrade->load(['academicYear', 'student', 'grade']);
         
         return response()->json([
             'status' => 'success',

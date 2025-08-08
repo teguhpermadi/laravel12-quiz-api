@@ -17,21 +17,6 @@ class StudentGrade extends Model
         'student_id',
         'grade_id',
     ];
-
-    public function academicYear()
-    {
-        return $this->belongsTo(AcademicYear::class);
-    }
-
-    public function student()
-    {
-        return $this->belongsTo(Student::class);
-    }
-    
-    public function grade()
-    {
-        return $this->belongsTo(Grade::class);
-    }
     
     public static function allowedFilters()
     {
@@ -51,5 +36,21 @@ class StudentGrade extends Model
     public static function allowedIncludes()
     {
         return ['academicYear', 'student', 'grade'];
+    }
+
+    
+    public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+    
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
     }
 }

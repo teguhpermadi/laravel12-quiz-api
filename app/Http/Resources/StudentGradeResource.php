@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Grade;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,18 +16,13 @@ class StudentGradeResource extends JsonResource
             'student_id' => $this->student_id,
             'grade_id' => $this->grade_id,
             'academic_year' => $this->whenLoaded('academicYear', function() {
-                return [
-                    'id' => $this->academicYear->id,
-                    'year' => $this->academicYear->year,
-                    'semester' => $this->academicYear->semester,
-                ];
+                return AcademicYearResource::make($this->academicYear);
+            }),
+            'student' => $this->whenLoaded('student', function() {
+                return StudentResource::make($this->student);
             }),
             'grade' => $this->whenLoaded('grade', function() {
-                return [
-                    'id' => $this->grade->id,
-                    'name' => $this->grade->name,
-                    'level' => $this->grade->level,
-                ];
+                return GradeResource::make($this->grade);
             }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
