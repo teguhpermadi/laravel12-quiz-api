@@ -41,7 +41,7 @@ class QuestionController extends Controller
         }
 
         // Tambahkan relasi teacher dan literature jika ada
-        $query->with(['teacher.profileLinkTokens', 'literature']);
+        $query->with(['teacher.profileLinkTokens']);
 
         $questions = $query->paginate($request->input('per_page', 15))
             ->appends($request->query());
@@ -117,7 +117,7 @@ class QuestionController extends Controller
         }
 
         // Load teacher dan literature jika ada
-        $question->load('teacher');
+        $question->load('teacher.profileLinkTokens');
 
         if ($question->literature_id) {
             $question->load('literature');
@@ -155,7 +155,7 @@ class QuestionController extends Controller
         }
 
         // Load teacher dan literature jika ada
-        $question->load('teacher');
+        $question->load('teacher.profileLinkTokens');
 
         if ($question->literature_id) {
             $question->load('literature');
@@ -181,7 +181,7 @@ class QuestionController extends Controller
         }
 
         // Load teacher dan literature jika ada
-        $question->load('teacher');
+        $question->load('teacher.profileLinkTokens');
 
         if ($question->literature_id) {
             $question->load('literature');
