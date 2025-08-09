@@ -46,4 +46,28 @@ enum QuestionTypeEnum: string
             self::JAVANESE_RESPONSE => 'Jawaban berupa teks dalam bahasa Jawa',
         };
     }
+
+    public function label(): string
+    {
+        return match($this) {
+            self::MULTIPLE_CHOICE => 'Multiple Choice',
+            self::COMPLEX_MULTIPLE_CHOICE => 'Complex Multiple Choice',
+            self::TRUE_FALSE => 'True/False',
+            self::SHORT_ANSWER => 'Short Answer',
+            self::ESSAY => 'Essay',
+            self::MATH_INPUT => 'Math Input',
+            self::MATCHING => 'Matching',
+            self::SEQUENCE => 'Sequence',
+            self::WORD_CLOUD => 'Word Cloud',
+            self::DRAWING => 'Drawing',
+            self::GRAPH => 'Graph',
+            self::HOTSPOT => 'Hotspot',
+            self::VOICE_RESPONSE => 'Voice Response',
+            self::IMAGE_RESPONSE => 'Image Response',
+            self::VIDEO_RESPONSE => 'Video Response',
+            self::CATEGORIZATION => 'Categorization',
+            self::ARABIC_RESPONSE => 'Arabic Response',
+            self::JAVANESE_RESPONSE => 'Javanese Response',
+        };
+    }
 }

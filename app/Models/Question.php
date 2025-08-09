@@ -37,17 +37,6 @@ class Question extends Model implements HasMedia
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'video/mp4']);
     }
 
-    public function teacher()
-    {
-        return $this->belongsTo(Teacher::class);
-    }
-
-    // Menambahkan relasi dengan Literature
-    public function literature()
-    {
-        return $this->belongsTo(Literature::class);
-    }
-
     public static function allowedFilters(): array
     {
         return [
@@ -86,6 +75,17 @@ class Question extends Model implements HasMedia
             'shortAnswers',
             'essayAnswers'
         ];
+    }
+    
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
+
+    // Menambahkan relasi dengan Literature
+    public function literature()
+    {
+        return $this->belongsTo(Literature::class);
     }
 
     public function answerables()

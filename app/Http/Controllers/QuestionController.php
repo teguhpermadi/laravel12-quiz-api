@@ -40,6 +40,9 @@ class QuestionController extends Controller
             $query->allowedIncludes(Question::allowedIncludes());
         }
 
+        // Tambahkan relasi teacher dan literature jika ada
+        $query->with(['teacher.profileLinkTokens', 'literature']);
+
         $questions = $query->paginate($request->input('per_page', 15))
             ->appends($request->query());
 
