@@ -16,7 +16,7 @@ class AcademicYearRequest extends FormRequest
         return [
             'year' => 'required|string|max:10',
             'semester' => 'required|string|in:odd,even',
-            'teacher_id' => 'required|exists:teachers,id',
+            'teacher_id' => 'required|exists:teachers,string',
         ];
     }
 }
