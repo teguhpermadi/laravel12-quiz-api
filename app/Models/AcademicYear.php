@@ -16,7 +16,19 @@ class AcademicYear extends Model
         'year',
         'semester',
         'teacher_id',
+        'is_active',
     ];
+
+    public static function setActive($id)
+    {
+        // Menonaktifkan semua tahun ajaran
+        self::query()->update(['is_active' => false]);
+
+        // Mengaktifkan tahun ajaran yang diberikan
+        self::where('id', $id)->update(['is_active' => true]);
+
+        return self::where('is_active', true)->first();
+    }
 
     public function teacher()
     {
@@ -41,5 +53,10 @@ class AcademicYear extends Model
     public static function allowedIncludes()
     {
         return ['teacher'];
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('year');
             $table->string('semester');
             $table->foreignUlid('teacher_id')->constrained('teachers')->cascadeOnDelete();
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

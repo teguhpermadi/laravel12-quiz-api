@@ -21,6 +21,7 @@ class AcademicYearFactory extends Factory
             'year' => $this->faker->year(),
             'semester' => $this->faker->randomElement(['odd', 'even']),
             'teacher_id' => Teacher::get()->random()->id,
+            'is_active' => $this->faker->boolean(),
         ];
     }
 }

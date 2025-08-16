@@ -17,6 +17,7 @@ class AcademicYearResource extends JsonResource
             'teacher' => $this->whenLoaded('teacher', function() {
                 return new TeacherResource($this->teacher);
             }),
+            'is_active' => $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
