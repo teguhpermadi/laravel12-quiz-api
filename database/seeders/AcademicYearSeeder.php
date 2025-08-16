@@ -13,6 +13,7 @@ class AcademicYearSeeder extends Seeder
      */
     public function run(): void
     {
-        AcademicYear::factory(4)->create();
+        AcademicYear::factory(3)->state(['is_active' => false])->create();
+        AcademicYear::factory(1)->state(['is_active' => true])->create();
     }
 }
