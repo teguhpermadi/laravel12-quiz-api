@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('student_grades', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('academic_year_id')->constrained('academic_years')->cascadeOnDelete();
             $table->foreignUlid('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignUlid('grade_id')->constrained('grades')->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['academic_year_id', 'student_id'], 'student_grades_unique');
+            $table->unique(['grade_id', 'student_id'], 'student_grades_unique');
         });
     }
 

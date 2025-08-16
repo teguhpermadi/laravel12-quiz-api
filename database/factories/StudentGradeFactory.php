@@ -20,7 +20,6 @@ class StudentGradeFactory extends Factory
     public function definition(): array
     {
         return [
-            'academic_year_id' => AcademicYear::get()->random()->id,
             'student_id' => Student::get()->random()->id,
             'grade_id' => Grade::get()->random()->id,
         ];

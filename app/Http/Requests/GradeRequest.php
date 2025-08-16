@@ -16,6 +16,7 @@ class GradeRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'level' => 'required|integer|min:1',
+            'academic_year_id' => 'required|exists:academic_years,id|string',
         ];
     }
 }
