@@ -19,6 +19,7 @@ class GradeFactory extends Factory
         return [
             'name' => $this->faker->randomElement(['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']),
             'level' => $this->faker->numberBetween(1, 12),
+            'academic_year_id' => \App\Models\AcademicYear::get()->random()->id,
         ];
     }
 }

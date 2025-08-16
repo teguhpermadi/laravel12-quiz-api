@@ -17,6 +17,9 @@ class GradeResource extends JsonResource
             'students' => $this->when($this->relationLoaded('students'), function() {
                 return StudentGradeResource::collection($this->students);
             }),
+            'academic_year' => $this->whenLoaded('academicYear', function() {
+                return new AcademicYearResource($this->academicYear);
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

@@ -15,6 +15,7 @@ class Grade extends Model
     protected $fillable = [
         'name',
         'level',
+        'academic_year_id',
     ];
     
     public static function allowedFilters()
@@ -29,21 +30,21 @@ class Grade extends Model
     
     public static function allowedSorts()
     {
-        return ['id', 'name', 'level', 'created_at', 'updated_at'];
+        return ['id', 'name', 'level', 'academic_year_id', 'created_at', 'updated_at'];
     }
     
     public static function allowedIncludes()
     {
-        return ['students', 'students.student', 'students.academicYear'];
+        return ['students', 'students.student', 'academicYear'];
     }
 
     public function students()
     {
         return $this->hasMany(StudentGrade::class);
     }
-    
-    public function studentsByAcademicYear($academicYearId)
+
+    public function academicYear()
     {
-        return $this->students()->where('academic_year_id', $academicYearId);
+        return $this->belongsTo(AcademicYear::class);
     }
 }
