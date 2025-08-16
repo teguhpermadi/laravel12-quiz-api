@@ -20,7 +20,6 @@ class StudentGradeController extends Controller
             ->allowedSorts(StudentGrade::allowedSorts())
             ->allowedIncludes(StudentGrade::allowedIncludes())
             ->with([
-                'academicYear',
                 'student',
                 'grade',
             ])
@@ -54,8 +53,8 @@ class StudentGradeController extends Controller
     {
         $studentGrade = StudentGrade::create($request->validated());
         
-        // Pastikan relasi 'academicYear', 'student', dan 'grade' dimuat
-        $studentGrade->load(['academicYear', 'student', 'grade']);
+        // Pastikan relasi 'student', dan 'grade' dimuat
+        $studentGrade->load(['student', 'grade']);
         
         return response()->json([
             'status' => 'success',
@@ -69,8 +68,8 @@ class StudentGradeController extends Controller
      */
     public function show(StudentGrade $studentGrade)
     {
-        // Pastikan relasi 'academicYear', 'student', dan 'grade' dimuat
-        $studentGrade->load(['academicYear', 'student', 'grade']);
+        // Pastikan relasi 'student', dan 'grade' dimuat
+        $studentGrade->load(['student', 'grade']);
 
         return response()->json([
             'status' => 'success',
@@ -85,8 +84,8 @@ class StudentGradeController extends Controller
     {
         $studentGrade->update($request->validated());
 
-        // Pastikan relasi 'academicYear', 'student', dan 'grade' dimuat
-        $studentGrade->load(['academicYear', 'student', 'grade']);
+        // Pastikan relasi 'student', dan 'grade' dimuat
+        $studentGrade->load(['student', 'grade']);
         
         return response()->json([
             'status' => 'success',

@@ -12,7 +12,6 @@ class StudentGradeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'academic_year_id' => $this->academic_year_id,
             'student_id' => $this->student_id,
             'grade_id' => $this->grade_id,
             'student' => $this->whenLoaded('student', function() {
