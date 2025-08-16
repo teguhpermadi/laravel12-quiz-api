@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TeacherSeeder::class,
             StudentSeeder::class,
-            GradeSeeder::class,
             SubjectSeeder::class,
             AcademicYearSeeder::class,
+            GradeSeeder::class,
             StudentGradeSeeder::class,
             TeacherSubjectSeeder::class,
             LiteratureSeeder::class, // Tambahkan LiteratureSeeder sebelum ExamSeeder dan QuestionSeeder

@@ -12,10 +12,11 @@ class GradeSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i=0; $i < 6; $i++) { 
+        for ($i=1; $i <= 6; $i++) { 
             \App\Models\Grade::create([
                 'name' => 'Grade ' . $i,
                 'level' => $i,
+                'academic_year_id' => \App\Models\AcademicYear::get()->random()->id,
             ]);
         }
     }

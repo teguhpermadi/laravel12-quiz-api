@@ -24,7 +24,7 @@ class Grade extends Model
             AllowedFilter::exact('id'),
             'name',
             'level',
-            AllowedFilter::exact('academic_year_id'),
+            'academic_year_id',
         ];
     }
     
