@@ -83,15 +83,31 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route untuk user yang sedang login untuk menautkan akunnya
     // Token diambil dari request body
     Route::post('link-profile', [ProfileLinkingController::class, 'linkProfileAccount']);
+
+    Route::prefix('academic-years')->group(function () {
+        // Route untuk menampilkan tahun akademik aktif
+        Route::get('/set-active/{academicYear}', [\App\Http\Controllers\AcademicYearController::class, 'setActive'])->name('academic-years.set-active');
+        // Route untuk menampilkan daftar semua tahun akademik dengan filter, sorting, dan pagination
+        Route::get('/', [\App\Http\Controllers\AcademicYearController::class, 'index']);
+        // Route untuk menyimpan tahun akademik baru
+        Route::post('/', [\App\Http\Controllers\AcademicYearController::class, 'store']);
+        // Route untuk menampilkan detail tahun akademik
+        Route::get('/{academicYear}', [\App\Http\Controllers\AcademicYearController::class, 'show']);
+        // Route untuk mengupdate tahun akademik
+        Route::put('/{academicYear}', [\App\Http\Controllers\AcademicYearController::class, 'update']);
+        // Route untuk menghapus tahun akademik
+        Route::delete('/{academicYear}', [\App\Http\Controllers\AcademicYearController::class, 'destroy']);
+    });
+
 });
 
 
 Route::apiResource('questions', \App\Http\Controllers\QuestionController::class);
 Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class);
 Route::apiResource('grades', \App\Http\Controllers\GradeController::class);
-Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);
 Route::apiResource('student-grades', \App\Http\Controllers\StudentGradeController::class);
 Route::apiResource('teacher-subjects', \App\Http\Controllers\TeacherSubjectController::class);
+// Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);
 Route::apiResource('exams', \App\Http\Controllers\ExamController::class);
 Route::apiResource('literatures', \App\Http\Controllers\LiteratureController::class); // Tambahkan route untuk Literature
 Route::get('/question-types', [\App\Http\Controllers\API\QuestionTypeController::class, 'index']);
