@@ -93,4 +93,19 @@ class AcademicYearController extends Controller
             'message' => 'Academic Year data deleted successfully'
         ]);
     }
+
+    /**
+     * mengatur tahun akademik aktif
+     */
+    public function setActive(AcademicYear $academicYear)
+    {
+        AcademicYear::query()->update(['is_active' => false]);
+        $academicYear->update(['is_active' => true]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Academic Year set as active successfully',
+            'data' => new AcademicYearResource($academicYear)
+        ]);
+    }
 }
