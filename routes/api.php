@@ -86,7 +86,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('academic-years')->group(function () {
         // Route untuk menampilkan tahun akademik aktif
-        Route::get('/set-active/{academicYear}', [\App\Http\Controllers\AcademicYearController::class, 'setActive'])->name('academic-years.set-active');
+        Route::get('/set-active', [\App\Http\Controllers\AcademicYearController::class, 'setActive'])->name('academic-years.set-active');
         // Route untuk menampilkan daftar semua tahun akademik dengan filter, sorting, dan pagination
         Route::get('/', [\App\Http\Controllers\AcademicYearController::class, 'index']);
         // Route untuk menyimpan tahun akademik baru

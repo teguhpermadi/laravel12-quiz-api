@@ -97,8 +97,14 @@ class AcademicYearController extends Controller
     /**
      * mengatur tahun akademik aktif
      */
-    public function setActive(AcademicYear $academicYear)
+    public function setActive(Request $request)
     {
+        $request->validate([
+            'academic_year_id' => 'required|exists:academic_years,id',
+        ]);
+
+        $academicYear = AcademicYear::findOrFail($request->academic_year_id);
+        
         AcademicYear::query()->update(['is_active' => false]);
         $academicYear->update(['is_active' => true]);
 
