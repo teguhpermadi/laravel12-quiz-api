@@ -19,7 +19,7 @@ class TeacherSubjectController extends Controller
             ->allowedFilters(TeacherSubject::allowedFilters())
             ->allowedSorts(TeacherSubject::allowedSorts())
             ->allowedIncludes(TeacherSubject::allowedIncludes())
-            ->with(['academicYear', 'teacher.profileLinkTokens', 'subject', 'grade'])
+            ->with(['teacher.profileLinkTokens', 'subject', 'grade'])
             ->paginate($request->input('per_page', 15))
             ->appends($request->query());
         

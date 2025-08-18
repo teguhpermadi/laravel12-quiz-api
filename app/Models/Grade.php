@@ -53,4 +53,9 @@ class Grade extends Model
     {
         return $this->belongsTo(AcademicYear::class);
     }
+
+    public function subjects()
+    {
+        return $this->hasMany(TeacherSubject::class);
+    }
 }

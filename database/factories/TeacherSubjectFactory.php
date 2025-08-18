@@ -21,7 +21,6 @@ class TeacherSubjectFactory extends Factory
     public function definition(): array
     {
         return [
-            'academic_year_id' => AcademicYear::get()->random()->id,
             'teacher_id' => Teacher::get()->random()->id,
             'subject_id' => Subject::get()->random()->id,
             'grade_id' => Grade::get()->random()->id,

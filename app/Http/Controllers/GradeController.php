@@ -32,6 +32,9 @@ class GradeController extends Controller
             ->with(['academicYear'])
             ->withCount(['students as student_count' => function ($query) use ($academicYearId) {
                 $query->where('academic_year_id', $academicYearId);
+            }])
+            ->withCount(['subjects as subjects_count' => function ($query) use ($academicYearId) {
+                $query->where('academic_year_id', $academicYearId);
             }]);
         
         $grades = $query->paginate($request->input('per_page', 15))
@@ -79,9 +82,9 @@ class GradeController extends Controller
         $academicYearId = $request->input('academic_year_id');
 
         // grade with students
-        $grade->load('students.student', 'academicYear');
+        $grade->load('students.student', 'academicYear', 'subjects.subject', 'subjects.teacher.profileLinkTokens');
         // grade with load student count
-        $grade->loadCount('students as student_count');
+        $grade->loadCount('students as student_count', 'subjects as subjects_count');
         
         return response()->json([
             'status' => 'success',

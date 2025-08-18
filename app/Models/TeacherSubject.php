@@ -13,7 +13,6 @@ class TeacherSubject extends Model
     use HasFactory, HasUlids;
 
     protected $fillable = [
-        'academic_year_id',
         'teacher_id',
         'subject_id',
         'grade_id',
@@ -23,7 +22,6 @@ class TeacherSubject extends Model
     {
         return [
             AllowedFilter::exact('id'),
-            AllowedFilter::exact('academic_year_id'),
             AllowedFilter::exact('teacher_id'),
             AllowedFilter::exact('subject_id'),
         ];
@@ -31,17 +29,12 @@ class TeacherSubject extends Model
     
     public static function allowedSorts()
     {
-        return ['id', 'academic_year_id', 'teacher_id', 'subject_id', 'grade_id', 'created_at', 'updated_at'];
+        return ['id', 'teacher_id', 'subject_id', 'grade_id', 'created_at', 'updated_at'];
     }
     
     public static function allowedIncludes()
     {
-        return ['academicYear', 'teacher', 'subject', 'grade'];
-    }
-
-    public function academicYear()
-    {
-        return $this->belongsTo(AcademicYear::class);
+        return ['teacher', 'subject', 'grade'];
     }
 
     public function teacher()
