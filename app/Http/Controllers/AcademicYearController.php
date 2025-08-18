@@ -114,4 +114,24 @@ class AcademicYearController extends Controller
             'data' => new AcademicYearResource($academicYear)
         ]);
     }
+
+    /**
+     * Mengambil tahun akademik aktif
+     */
+    public function getActive()
+    {
+        $academicYear = AcademicYear::where('is_active', true)->first();
+
+        if (!$academicYear) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No active academic year found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => new AcademicYearResource($academicYear)
+        ]);
+    }
 }
