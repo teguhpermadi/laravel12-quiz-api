@@ -79,7 +79,7 @@ class GradeController extends Controller
         $academicYearId = $request->input('academic_year_id');
 
         // grade with students
-        $grade->load('students', 'academicYear');
+        $grade->load('students.student', 'academicYear');
         // grade with load student count
         $grade->loadCount('students as student_count');
         

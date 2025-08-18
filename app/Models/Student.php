@@ -73,7 +73,7 @@ class Student extends Model
     }
     
     // Relasi ke StudentGrade
-    public function grades()
+    public function studentGrades()
     {
         return $this->hasMany(StudentGrade::class);
     }

@@ -54,7 +54,7 @@ Route::middleware('auth:sanctum', 'academic.year')->group(function () {
         // Route untuk menghapus beberapa siswa secara bulk
         Route::delete('/bulk-delete', [StudentController::class, 'bulkDelete'])->middleware('permission:delete-student');
         // Route untuk menamkan siswa yang tidak memiliki grade berdasarkan tahun akademik
-        Route::get('/without-grades/{academic_year_id}', [StudentController::class, 'studentsWithoutGrades'])->middleware('permission:viewAny-student');
+        Route::get('/without-grades', [StudentController::class, 'studentsWithoutGrades'])->middleware('permission:viewAny-student', 'academic.year');
         // Route untuk mendapatkan daftar siswa dengan filter, sorting, dan pagination
         Route::get('/', [StudentController::class, 'index'])->middleware('permission:viewAny-student');
         // Route untuk melihat detail siswa (view)

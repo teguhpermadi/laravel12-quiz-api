@@ -13,6 +13,7 @@ use App\Http\Requests\StudentUpdateRequest;
 use App\Http\Resources\StudentResource;
 use App\Imports\StudentImport;
 use App\Imports\StudentTemplateValidation;
+use App\Models\Grade;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -241,20 +242,53 @@ class StudentController extends Controller
     }
 
     /**
+     * Menampilkan daftar siswa yang memiliki grade berdasarkan tahun akademik
+     */
+    public function studentsWithGrades(Request $request)
+    {
+        // Validasi input
+        $request->validate(['academic_year_id' => 'ulid']);
+
+        $academicYearId = $request->input('academic_year_id');
+
+        $activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+        $students = Student::whereHas('studentGrades', function ($query) use ($activeGradeIds) {
+            $query->whereIn('grade_id', $activeGradeIds);
+        })->paginate($request->input('per_page', 15));
+
+        return response()->json([
+            'status' => 'success',
+            'data' => StudentResource::collection($students),
+            'meta' => [
+                'current_page' => $students->currentPage(),
+                'from' => $students->firstItem(),
+                'last_page' => $students->lastPage(),
+                'per_page' => $students->perPage(),
+                'to' => $students->lastItem(),
+                'total' => $students->total(),
+            ],
+            'links' => [
+                'first' => $students->url(1),
+                'last' => $students->url($students->lastPage()),
+                'prev' => $students->previousPageUrl(),
+                'next' => $students->nextPageUrl(),
+            ],
+        ]);
+    }
+
+    /**
      * Menampilkan daftar siswa yang tidak memiliki grade berdasarkan tahun akademik
      */
     public function studentsWithoutGrades(Request $request)
     {
         // Validasi input
-        $request->validate([
-            'academic_year_id' => 'required|ulid',
-        ]);
+        $request->validate(['academic_year_id' => 'ulid']);
 
         $academicYearId = $request->input('academic_year_id');
 
-        // Membangun query dengan pagination
-        $students = Student::whereDoesntHave('grades', function ($query) use ($academicYearId) {
-            $query->where('academic_year_id', $academicYearId);
+        $activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+        $students = Student::whereDoesntHave('studentGrades', function ($query) use ($activeGradeIds) {
+            $query->whereIn('grade_id', $activeGradeIds);
         })->paginate($request->input('per_page', 15));
 
         return response()->json([

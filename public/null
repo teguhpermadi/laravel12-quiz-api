@@ -6,3 +6,47 @@ User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role()
 User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role('admimn')
 User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role('admin')
 User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->hasRole('admin')
+$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+$gradeIds = Grade::where('academic_year_id', $academicYearId)
+            ->pluck('id');
+$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+
+$students = Student::whereDoesntHave('studentGrades', function ($query) use ($academicYearId) {
+            $query->where('academic_year_id', $academicYearId);
+        });
+$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+
+$students = Student::whereDoesntHave('studentGrades', function ($query) use ($academicYearId) {
+            $query->where('academic_year_id', $academicYearId);
+        })->get();
+$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+
+$activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+$allStudentsWhereDoesntHaveGrades = Student::whereDoesntHave('studentGrades', function ($query) use ($academicYearId, $activeGradeIds) {
+  $query->whereIn('grade_id', $activeGradeIds);
+});
+$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+
+$activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+$allStudentsWhereDoesntHaveGrades = Student::whereDoesntHave('studentGrades', function ($query) use ($academicYearId, $activeGradeIds) {
+  $query->whereIn('grade_id', $activeGradeIds);
+})->get();
+$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+
+$activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+
+$allStudentsWhereDoesntHaveGrades = Student::whereDoesntHave('studentGrades', function ($query) use ($activeGradeIds) {
+  $query->whereIn('grade_id', $activeGradeIds);
+})->get();
+$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+
+$activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+
+$allStudentsWhereDoesntHaveGrades = Student::whereDoesntHave('studentGrades', function ($query) use ($activeGradeIds) {
+  $query->whereIn('grade_id', $activeGradeIds);
+})->get();
+
+$activeGradeIds;
+AcademicYear::get()
+Grade::get()
+Grade::with('academicYear')->get()
