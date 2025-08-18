@@ -9,6 +9,7 @@ use App\Models\Grade;
 use App\Models\StudentGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class GradeController extends Controller
@@ -18,11 +19,14 @@ class GradeController extends Controller
      */
     public function index(Request $request)
     {
-        // $academicYearId = $request->input('academic_year_id');
-        $academicYearId = AcademicYear::active()->first()->id ?? -1;
-        
+        $request->validate([
+            'academic_year_id' => 'ulid',
+        ]);
+
+        $academicYearId = $request->input('academic_year_id');
+
         $query = QueryBuilder::for(Grade::class)
-            ->allowedFilters(Grade::allowedFilters())
+            ->allowedFilters(AllowedFilter::exact('academic_year_id')->default($academicYearId))
             ->allowedSorts(Grade::allowedSorts())
             ->allowedIncludes(Grade::allowedIncludes())
             ->with(['academicYear'])
@@ -73,6 +77,11 @@ class GradeController extends Controller
     public function show(Request $request, Grade $grade)
     {
         $academicYearId = $request->input('academic_year_id');
+
+        // grade with students
+        $grade->load('students', 'academicYear');
+        // grade with load student count
+        $grade->loadCount('students as student_count');
         
         return response()->json([
             'status' => 'success',

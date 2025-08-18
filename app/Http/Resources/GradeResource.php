@@ -13,12 +13,12 @@ class GradeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'level' => $this->level,
+            'academic_year' => $this->whenLoaded('academicYear', function() {
+                return new AcademicYearResource($this->academicYear);
+            }),
             'student_count' => $this->when(isset($this->student_count), $this->student_count),
             'students' => $this->when($this->relationLoaded('students'), function() {
                 return StudentGradeResource::collection($this->students);
-            }),
-            'academic_year' => $this->whenLoaded('academicYear', function() {
-                return new AcademicYearResource($this->academicYear);
             }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

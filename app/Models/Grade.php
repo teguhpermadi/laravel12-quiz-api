@@ -41,7 +41,7 @@ class Grade extends Model
 
     protected static function booted(): void
     {
-        static::addGlobalScope(new AcademicYearScope);
+        // static::addGlobalScope(new AcademicYearScope);
     }
 
     public function students()

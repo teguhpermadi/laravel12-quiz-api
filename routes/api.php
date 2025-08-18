@@ -7,14 +7,10 @@ use App\Http\Controllers\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum', 'academic.year')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/user', [AuthController::class, 'me']);
@@ -74,40 +70,19 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route untuk menghapus siswa secara permanen (forceDelete)
         Route::delete('/{student}/force-delete', [StudentController::class, 'forceDelete'])->middleware('permission:forceDelete-student');
     });
-
-    // --- NEW: Routes untuk Profile Linking ---
-    // Route untuk admin/user berwenang untuk menghasilkan token
-    // Menggunakan POST karena ini adalah aksi yang mengubah state (membuat token)
+    
     Route::post('link-tokens/generate/{type}/{id}', [ProfileLinkingController::class, 'generateLinkToken']);
-
-    // Route untuk user yang sedang login untuk menautkan akunnya
-    // Token diambil dari request body
     Route::post('link-profile', [ProfileLinkingController::class, 'linkProfileAccount']);
-
-    Route::prefix('academic-years')->group(function () {
-        // Route untuk menampilkan tahun akademik aktif
-        Route::get('/set-active', [\App\Http\Controllers\AcademicYearController::class, 'setActive'])->name('academic-years.set-active');
-        // Route untuk menampilkan daftar semua tahun akademik dengan filter, sorting, dan pagination
-        Route::get('/', [\App\Http\Controllers\AcademicYearController::class, 'index']);
-        // Route untuk menyimpan tahun akademik baru
-        Route::post('/', [\App\Http\Controllers\AcademicYearController::class, 'store']);
-        // Route untuk menampilkan detail tahun akademik
-        Route::get('/{academicYear}', [\App\Http\Controllers\AcademicYearController::class, 'show']);
-        // Route untuk mengupdate tahun akademik
-        Route::put('/{academicYear}', [\App\Http\Controllers\AcademicYearController::class, 'update']);
-        // Route untuk menghapus tahun akademik
-        Route::delete('/{academicYear}', [\App\Http\Controllers\AcademicYearController::class, 'destroy']);
-    });
-
 });
 
 
 Route::apiResource('questions', \App\Http\Controllers\QuestionController::class);
 Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class);
-Route::apiResource('grades', \App\Http\Controllers\GradeController::class);
+Route::apiResource('grades', \App\Http\Controllers\GradeController::class)->middleware('academic.year');
 Route::apiResource('student-grades', \App\Http\Controllers\StudentGradeController::class);
 Route::apiResource('teacher-subjects', \App\Http\Controllers\TeacherSubjectController::class);
-// Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);
+Route::get('academic-years/set-active', [\App\Http\Controllers\AcademicYearController::class, 'setActive']);
+Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);
 Route::apiResource('exams', \App\Http\Controllers\ExamController::class);
 Route::apiResource('literatures', \App\Http\Controllers\LiteratureController::class); // Tambahkan route untuk Literature
 Route::get('/question-types', [\App\Http\Controllers\API\QuestionTypeController::class, 'index']);

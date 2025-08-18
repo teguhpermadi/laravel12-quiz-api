@@ -1,17 +1,8 @@
-AcademicYear::active()->first()
-Grade::all()
-StudentGrade::all()
-Grade::count()
-Grade::withoutGlobalScope()->count()
-use App\Models\Scopes\AcademicYearScope;
-
-Grade::withoutGlobalScope(AcademicYearScope)->count()
-use App\Models\Scopes\AcademicYearScope;
-
-Grade::withoutGlobalScope(AcademicYearScope::class)->count()
-use App\Models\Scopes\AcademicYearScope;
-
-Grade::withoutGlobalScope(AcademicYearScope::class)->get()
-use App\Models\Scopes\AcademicYearScope;
-
-Grade::get()
+User::get()
+User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')
+User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role
+User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->assignRole('admin')
+User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role()
+User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role('admimn')
+User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role('admin')
+User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->hasRole('admin')
