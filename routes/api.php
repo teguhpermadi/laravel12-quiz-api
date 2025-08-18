@@ -33,6 +33,7 @@ Route::prefix('students')->middleware('auth:sanctum', 'academic.year')->group(fu
     Route::get('/export', [StudentController::class, 'export']);
     Route::delete('/bulk-delete', [StudentController::class, 'bulkDelete']);
     Route::get('/without-grades', [StudentController::class, 'studentsWithoutGrades']);
+    Route::get('/with-grades', [StudentController::class, 'studentsWithGrades']);
 });
 Route::apiResource('students', \App\Http\Controllers\StudentController::class)->middleware('academic.year');
 

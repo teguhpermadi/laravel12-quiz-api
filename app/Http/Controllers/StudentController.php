@@ -88,13 +88,7 @@ class StudentController extends Controller
     {
         $academicYearId = $request->input('academic_year_id');
         
-        // Jika ada parameter academic_year_id, load grades berdasarkan tahun akademik
-        if ($academicYearId) {
-            $student->load(['grades' => function($query) use ($academicYearId) {
-                $query->where('academic_year_id', $academicYearId)
-                      ->with(['grade', 'academicYear']);
-            }]);
-        }
+        $student->load('studentGrades.grade');
         
         return response()->json([
             'status' => 'success',

@@ -50,3 +50,4 @@ $activeGradeIds;
 AcademicYear::get()
 Grade::get()
 Grade::with('academicYear')->get()
+Student::with('studentGrades')->find('01k2s1j8mrc8z3kzt73sq0etyv')
