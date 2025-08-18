@@ -10,71 +10,31 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::middleware('auth:sanctum', 'academic.year')->group(function () {
-
+Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/user', [AuthController::class, 'me']);
-
-    // Route Teachers prefix
-    Route::prefix('teachers')->group(function () {
-        // Route untuk mengunduh template impor guru
-        Route::get('/template', [TeacherController::class, 'downloadTemplate']);
-        // Route untuk mengimport data guru
-        Route::post('/import', [TeacherController::class, 'import']);
-        // route untuk mengexport data guru
-        Route::get('/export', [TeacherController::class, 'export']);
-        // Route untuk menghapus beberapa guru secara bulk
-        Route::delete('/bulk-delete', [TeacherController::class, 'bulkDelete'])->middleware('permission:delete-teacher');
-        // Route untuk mendapatkan status token link guru
-        Route::get('/{teacher}/link-token-status', [TeacherController::class, 'getLinkTokenStatus']);
-        // Route untuk mendapatkan daftar guru dengan filter, sorting, dan pagination
-        Route::get('/', [TeacherController::class, 'index'])->middleware('permission:viewAny-teacher');
-        // Route untuk melihat detail guru (view)
-        Route::get('/{teacher}', [TeacherController::class, 'show'])->middleware('permission:view-teacher');
-        // Route untuk membuat guru baru (create)
-        Route::post('/', [TeacherController::class, 'store'])->middleware('permission:create-teacher');
-        // Route untuk mengupdate guru (update)
-        Route::put('/{teacher}', [TeacherController::class, 'update'])->middleware('permission:update-teacher');
-        // Route untuk menghapus guru (delete)
-        Route::delete('/{teacher}', [TeacherController::class, 'destroy'])->middleware('permission:delete-teacher');
-        // Route untuk mengembalikan guru yang dihapus secara soft (restore)
-        Route::post('/{teacher}/restore', [TeacherController::class, 'restore'])->middleware('permission:restore-teacher');
-        // Route untuk menghapus guru secara permanen (forceDelete)
-        Route::delete('/{teacher}/force-delete', [TeacherController::class, 'forceDelete'])->middleware('permission:forceDelete-teacher');
-    });
-
-    // Route Students prefix
-    Route::prefix('students')->group(function () {
-        // Route untuk mengunduh template impor siswa
-        Route::get('/template', [StudentController::class, 'downloadTemplate']);
-        // Route untuk mengimport data siswa
-        Route::post('/import', [StudentController::class, 'import']);
-        // Route untuk mengexport data siswa
-        Route::get('/export', [StudentController::class, 'export']);
-        // Route untuk menghapus beberapa siswa secara bulk
-        Route::delete('/bulk-delete', [StudentController::class, 'bulkDelete'])->middleware('permission:delete-student');
-        // Route untuk menamkan siswa yang tidak memiliki grade berdasarkan tahun akademik
-        Route::get('/without-grades', [StudentController::class, 'studentsWithoutGrades'])->middleware('permission:viewAny-student', 'academic.year');
-        // Route untuk mendapatkan daftar siswa dengan filter, sorting, dan pagination
-        Route::get('/', [StudentController::class, 'index'])->middleware('permission:viewAny-student');
-        // Route untuk melihat detail siswa (view)
-        Route::get('/{student}', [StudentController::class, 'show']);
-        // Route untuk membuat siswa baru (create)
-        Route::post('/', [StudentController::class, 'store'])->middleware('permission:create-student');
-        // Route untuk mengupdate siswa (update)
-        Route::put('/{student}', [StudentController::class, 'update'])->middleware('permission:update-student');
-        // Route untuk menghapus siswa (delete)
-        Route::delete('/{student}', [StudentController::class, 'destroy'])->middleware('permission:delete-student');
-        // Route untuk mengembalikan siswa yang dihapus secara soft (restore)
-        Route::post('/{student}/restore', [StudentController::class, 'restore'])->middleware('permission:restore-student');
-        // Route untuk menghapus siswa secara permanen (forceDelete)
-        Route::delete('/{student}/force-delete', [StudentController::class, 'forceDelete'])->middleware('permission:forceDelete-student');
-    });
-    
     Route::post('link-tokens/generate/{type}/{id}', [ProfileLinkingController::class, 'generateLinkToken']);
     Route::post('link-profile', [ProfileLinkingController::class, 'linkProfileAccount']);
 });
 
+
+Route::prefix('teachers')->middleware('auth:sanctum', 'academic.year')->group(function () {
+    Route::get('/template', [TeacherController::class, 'downloadTemplate']);
+    Route::post('/import', [TeacherController::class, 'import']);
+    Route::get('/export', [TeacherController::class, 'export']);
+    Route::delete('/bulk-delete', [TeacherController::class, 'bulkDelete']);
+    Route::get('/{teacher}/link-token-status', [TeacherController::class, 'getLinkTokenStatus']);
+});
+Route::apiResource('teachers', \App\Http\Controllers\TeacherController::class)->middleware('academic.year');
+
+Route::prefix('students')->middleware('auth:sanctum', 'academic.year')->group(function () {
+    Route::get('/template', [StudentController::class, 'downloadTemplate']);
+    Route::post('/import', [StudentController::class, 'import']);
+    Route::get('/export', [StudentController::class, 'export']);
+    Route::delete('/bulk-delete', [StudentController::class, 'bulkDelete']);
+    Route::get('/without-grades', [StudentController::class, 'studentsWithoutGrades']);
+});
+Route::apiResource('students', \App\Http\Controllers\StudentController::class)->middleware('academic.year');
 
 Route::apiResource('questions', \App\Http\Controllers\QuestionController::class);
 Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class);
