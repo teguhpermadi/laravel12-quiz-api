@@ -43,7 +43,7 @@ Route::apiResource('grades', \App\Http\Controllers\GradeController::class)->midd
 Route::apiResource('student-grades', \App\Http\Controllers\StudentGradeController::class);
 Route::apiResource('teacher-subjects', \App\Http\Controllers\TeacherSubjectController::class);
 Route::get('academic-years/active', [\App\Http\Controllers\AcademicYearController::class, 'getActive']);
-Route::get('academic-years/set-active', [\App\Http\Controllers\AcademicYearController::class, 'setActive']);
+Route::post('academic-years/set-active', [\App\Http\Controllers\AcademicYearController::class, 'setActive']);
 Route::apiResource('academic-years', \App\Http\Controllers\AcademicYearController::class);
 Route::apiResource('exams', \App\Http\Controllers\ExamController::class);
 Route::apiResource('literatures', \App\Http\Controllers\LiteratureController::class); // Tambahkan route untuk Literature
