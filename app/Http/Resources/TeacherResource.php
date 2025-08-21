@@ -11,6 +11,9 @@ class TeacherResource extends JsonResource
     {
         // Cari token aktif yang belum digunakan dan belum kadaluarsa
         // Relasi profileLinkTokens harus sudah di-eager load dengan constraint
+        if(!$this->relationLoaded('profileLinkTokens')) {
+            $this->load('profileLinkTokens');
+        }
         $activeToken = $this->whenLoaded('profileLinkTokens', function () {
             return $this->profileLinkTokens->first(function ($token) {
                 return is_null($token->used_at) && $token->expires_at->isFuture();
@@ -23,7 +26,7 @@ class TeacherResource extends JsonResource
             'gender' => $this->gender,
             'nip' => $this->nip,
             'subject_count' => $this->whenNotNull($this->subject_count),
-            'subjects' => SubjectResource::collection($this->whenLoaded('subjects')),
+            'subjects' => TeacherSubjectResource::collection($this->whenLoaded('subjects')),
             'user' => new UserResource($this->whenLoaded('user')),
             'is_linked_to_user' => $this->user()->exists(), // Status apakah sudah tertaut user
             'active_link_token' => $this->when($activeToken, function () use ($activeToken) {

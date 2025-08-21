@@ -14,10 +14,10 @@ class AcademicYearRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'year' => 'required|string|max:10',
-            'semester' => 'required|string|in:odd,even',
-            'teacher_id' => 'required|exists:teachers,string',
-            'is_active' => 'required|boolean',
+            'year' => 'required',
+            'semester' => 'required|in:odd,even',
+            'teacher_id' => 'required|exists:teachers,id',
+            'is_active' => 'boolean',
         ];
     }
 }

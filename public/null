@@ -1,53 +1,40 @@
-User::get()
-User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')
-User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role
-User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->assignRole('admin')
-User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role()
-User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role('admimn')
-User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->role('admin')
-User::find('01k2s1j7jw8kcf2jxqv7x7kzcd')->hasRole('admin')
-$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
-$gradeIds = Grade::where('academic_year_id', $academicYearId)
-            ->pluck('id');
-$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
+$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
+$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
 
-$students = Student::whereDoesntHave('studentGrades', function ($query) use ($academicYearId) {
-            $query->where('academic_year_id', $academicYearId);
-        });
-$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+Teacher::find($teacher_id);
+$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
+$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
+$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
 
-$students = Student::whereDoesntHave('studentGrades', function ($query) use ($academicYearId) {
-            $query->where('academic_year_id', $academicYearId);
-        })->get();
-$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+Teacher::find($teacher_id)->with('subject');
+$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
+$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
+$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
 
-$activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
-$allStudentsWhereDoesntHaveGrades = Student::whereDoesntHave('studentGrades', function ($query) use ($academicYearId, $activeGradeIds) {
-  $query->whereIn('grade_id', $activeGradeIds);
-});
-$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+Teacher::with('subject')->find($teacher_id);
+$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
+$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
+$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
 
-$activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
-$allStudentsWhereDoesntHaveGrades = Student::whereDoesntHave('studentGrades', function ($query) use ($academicYearId, $activeGradeIds) {
-  $query->whereIn('grade_id', $activeGradeIds);
-})->get();
-$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+Teacher::with('subjects')->find($teacher_id);
+$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
+$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
+$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
 
-$activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+Teacher::with('subjects.subject')->find($teacher_id);
+$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
+$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
+$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
 
-$allStudentsWhereDoesntHaveGrades = Student::whereDoesntHave('studentGrades', function ($query) use ($activeGradeIds) {
-  $query->whereIn('grade_id', $activeGradeIds);
-})->get();
-$academicYearId = '01k2s1ja1t09k1ad8avbrqw353';
+Teacher::with('subjects.subject', 'subjects.grade')->find($teacher_id);
+$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
+$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
+$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
 
-$activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+Teacher::with('subjects.subject', 'subjects.grade.academicYear')->find($teacher_id);
+$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
+$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
+$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
 
-$allStudentsWhereDoesntHaveGrades = Student::whereDoesntHave('studentGrades', function ($query) use ($activeGradeIds) {
-  $query->whereIn('grade_id', $activeGradeIds);
-})->get();
-
-$activeGradeIds;
-AcademicYear::get()
-Grade::get()
-Grade::with('academicYear')->get()
-Student::with('studentGrades')->find('01k2s1j8mrc8z3kzt73sq0etyv')
+Teacher::with('subjects.subject', 'subjects.grade')->find($teacher_id);
