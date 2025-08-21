@@ -85,7 +85,10 @@ class StudentController extends Controller
     {
         $academicYearId = $request->input('academic_year_id');
         
-        $student->load('studentGrades.grade');
+        $activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+        $student->load(['studentGrades' => function ($query) use ($activeGradeIds) {
+            $query->whereIn('grade_id', $activeGradeIds);
+        }, 'studentGrades.grade']);
         
         return response()->json([
             'status' => 'success',
