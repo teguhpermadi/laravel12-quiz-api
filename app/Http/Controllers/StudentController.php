@@ -36,13 +36,10 @@ class StudentController extends Controller
             ->allowedIncludes(Student::allowedIncludes())
             ->with(['user', 'profileLinkTokens']);
             
-        // Jika ada parameter academic_year_id, load grades berdasarkan tahun akademik
-        if ($academicYearId) {
-            $query->with(['grades' => function($query) use ($academicYearId) {
-                $query->where('academic_year_id', $academicYearId)
-                      ->with(['grade', 'academicYear']);
-            }]);
-        }
+        $activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
+        $query->with(['studentGrades' => function ($query) use ($activeGradeIds) {
+            $query->whereIn('grade_id', $activeGradeIds);
+        }, 'studentGrades.grade']);
         
         $students = $query->paginate($request->input('per_page', 15))
             ->appends($request->query());
