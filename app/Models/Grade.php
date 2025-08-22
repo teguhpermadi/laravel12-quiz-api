@@ -46,7 +46,8 @@ class Grade extends Model
 
     public function students()
     {
-        return $this->hasMany(StudentGrade::class);
+        return $this->belongsToMany(Student::class, 'student_grades')
+                    ->using(StudentGrade::class);
     }
 
     public function academicYear()

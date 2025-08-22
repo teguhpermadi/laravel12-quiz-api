@@ -20,8 +20,6 @@ class StudentGradeResource extends JsonResource
             'grade' => $this->whenLoaded('grade', function() {
                 return GradeResource::make($this->grade);
             }),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
         ];
     }
 }

@@ -19,10 +19,6 @@ class GradeController extends Controller
      */
     public function index(Request $request)
     {
-        $request->validate([
-            'academic_year_id' => 'ulid',
-        ]);
-
         $academicYearId = $request->input('academic_year_id');
 
         $query = QueryBuilder::for(Grade::class)
@@ -36,28 +32,40 @@ class GradeController extends Controller
             ->withCount(['subjects as subjects_count' => function ($query) use ($academicYearId) {
                 $query->where('academic_year_id', $academicYearId);
             }]);
-        
-        $grades = $query->paginate($request->input('per_page', 15))
-            ->appends($request->query());
-        
-        return response()->json([
-            'status' => 'success',
-            'data' => GradeResource::collection($grades),
-            'meta' => [
-                'current_page' => $grades->currentPage(),
-                'from' => $grades->firstItem(),
-                'last_page' => $grades->lastPage(),
-                'per_page' => $grades->perPage(),
-                'to' => $grades->lastItem(),
-                'total' => $grades->total(),
-            ],
-            'links' => [
-                'first' => $grades->url(1),
-                'last' => $grades->url($grades->lastPage()),
-                'prev' => $grades->previousPageUrl(),
-                'next' => $grades->nextPageUrl(),
-            ],
-        ]);
+
+        if ($request->input('per_page') === 'all') {
+            // Ambil semua data tanpa paginasi
+            $grades = $query->get();
+            
+            return response()->json([
+                'status' => 'success',
+                'data' => GradeResource::collection($grades),
+            ]);
+
+        } else {
+            // Lanjutkan dengan paginasi (default behavior)
+            $grades = $query->paginate($request->input('per_page', 15))
+                ->appends($request->query());
+
+            return response()->json([
+                'status' => 'success',
+                'data' => GradeResource::collection($grades),
+                'meta' => [
+                    'current_page' => $grades->currentPage(),
+                    'from' => $grades->firstItem(),
+                    'last_page' => $grades->lastPage(),
+                    'per_page' => $grades->perPage(),
+                    'to' => $grades->lastItem(),
+                    'total' => $grades->total(),
+                ],
+                'links' => [
+                    'first' => $grades->url(1),
+                    'last' => $grades->url($grades->lastPage()),
+                    'prev' => $grades->previousPageUrl(),
+                    'next' => $grades->nextPageUrl(),
+                ],
+            ]);
+        }
     }
 
     /**
@@ -65,8 +73,20 @@ class GradeController extends Controller
      */
     public function store(GradeRequest $request)
     {
-        $grade = Grade::create($request->validated());
-        
+        $validatedData = $request->validated();
+
+        $grade = Grade::create([
+            'name' => $validatedData['name'],
+            'level' => $validatedData['level'],
+            'academic_year_id' => $validatedData['academic_year_id'],
+        ]);
+
+        // 2. Gunakan sync() atau attach() untuk menyimpan relasi
+        // sync() akan memastikan relasi yang ada di array 'student_ids' tersimpan,
+        // dan menghapus relasi lain yang tidak ada di array tersebut.
+        // Jika Anda hanya ingin menambahkan relasi baru, gunakan attach().
+        $grade->students()->sync($validatedData['student_ids']);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Grade added successfully',
@@ -82,10 +102,10 @@ class GradeController extends Controller
         $academicYearId = $request->input('academic_year_id');
 
         // grade with students
-        $grade->load('students.student', 'academicYear', 'subjects.subject', 'subjects.teacher.profileLinkTokens');
+        $grade->load('students', 'academicYear', 'subjects.subject', 'subjects.teacher.profileLinkTokens');
         // grade with load student count
         $grade->loadCount('students as student_count', 'subjects as subjects_count');
-        
+
         return response()->json([
             'status' => 'success',
             'data' => new GradeResource($grade)
@@ -98,7 +118,7 @@ class GradeController extends Controller
     public function update(GradeRequest $request, Grade $grade)
     {
         $grade->update($request->validated());
-        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Grade data updated successfully',
@@ -112,7 +132,7 @@ class GradeController extends Controller
     public function destroy(Grade $grade)
     {
         $grade->delete();
-        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Grade data deleted successfully'

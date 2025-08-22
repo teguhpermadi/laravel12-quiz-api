@@ -1,40 +1,14 @@
-$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
-$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
-$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
+$grade = Grade::create([
+	'name' => 'tes',
+  'level' => 1,
+  'academic_year_id' => '01k2y9tgtcq55ef6xsvnq6d97p'
+]);
+$grade = Grade::create([
+	'name' => 'tes',
+	'level' => 1,
+	'academic_year_id' => '01k2y9tgtcq55ef6xsvnq6d97p'
+]);
 
-Teacher::find($teacher_id);
-$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
-$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
-$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
-
-Teacher::find($teacher_id)->with('subject');
-$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
-$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
-$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
-
-Teacher::with('subject')->find($teacher_id);
-$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
-$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
-$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
-
-Teacher::with('subjects')->find($teacher_id);
-$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
-$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
-$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
-
-Teacher::with('subjects.subject')->find($teacher_id);
-$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
-$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
-$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
-
-Teacher::with('subjects.subject', 'subjects.grade')->find($teacher_id);
-$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
-$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
-$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
-
-Teacher::with('subjects.subject', 'subjects.grade.academicYear')->find($teacher_id);
-$student_id = '01k2s1j8mrc8z3kzt73sq0etyv';
-$grade_id = '01k2s1ja2xhx8pz42xf5s4qa9p';
-$teacher_id = '01k2y9tf7dmkvbjme212gdzs8e';
-
-Teacher::with('subjects.subject', 'subjects.grade')->find($teacher_id);
+$grade->students()->sync([
+'01k2y9tfdgmzd4j18m2r57m9b5'
+]);

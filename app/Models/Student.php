@@ -75,7 +75,8 @@ class Student extends Model
     // Relasi ke StudentGrade
     public function studentGrades()
     {
-        return $this->hasMany(StudentGrade::class);
+        return $this->belongsToMany(Grade::class, 'student_grades')
+                    ->using(StudentGrade::class);
     }
     
     // Method untuk mendapatkan grade berdasarkan tahun akademik

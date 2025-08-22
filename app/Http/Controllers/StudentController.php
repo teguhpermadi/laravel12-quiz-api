@@ -39,29 +39,41 @@ class StudentController extends Controller
         $activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
         $query->with(['studentGrades' => function ($query) use ($activeGradeIds) {
             $query->whereIn('grade_id', $activeGradeIds);
-        }, 'studentGrades.grade']);
-        
-        $students = $query->paginate($request->input('per_page', 15))
-            ->appends($request->query());
-        
-        return response()->json([
-            'status' => 'success',
-            'data' => StudentResource::collection($students),
-            'meta' => [
-                'current_page' => $students->currentPage(),
-                'from' => $students->firstItem(),
-                'last_page' => $students->lastPage(),
-                'per_page' => $students->perPage(),
-                'to' => $students->lastItem(),
-                'total' => $students->total(),
-            ],
-            'links' => [
-                'first' => $students->url(1),
-                'last' => $students->url($students->lastPage()),
-                'prev' => $students->previousPageUrl(),
-                'next' => $students->nextPageUrl(),
-            ],
-        ]);
+        }, 'studentGrades']);
+
+        if ($request->get('per_page') === 'all') {
+            // Ambil semua data tanpa paginasi
+            $query = $query->get();
+            
+            return response()->json([
+                'status' => 'success',
+                'data' => StudentResource::collection($query)
+            ]);
+
+        } else {
+            // Lanjutkan dengan paginasi (default behavior)
+            $students = $query->paginate($request->input('per_page', 15))
+                ->appends($request->query());
+            
+            return response()->json([
+                'status' => 'success',
+                'data' => StudentResource::collection($students),
+                'meta' => [
+                    'current_page' => $students->currentPage(),
+                    'from' => $students->firstItem(),
+                    'last_page' => $students->lastPage(),
+                    'per_page' => $students->perPage(),
+                    'to' => $students->lastItem(),
+                    'total' => $students->total(),
+                ],
+                'links' => [
+                    'first' => $students->url(1),
+                    'last' => $students->url($students->lastPage()),
+                    'prev' => $students->previousPageUrl(),
+                    'next' => $students->nextPageUrl(),
+                ],
+            ]);
+        }
     }
 
     /**
