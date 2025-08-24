@@ -100,7 +100,7 @@ class StudentController extends Controller
         $activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
         $student->load(['studentGrades' => function ($query) use ($activeGradeIds) {
             $query->whereIn('grade_id', $activeGradeIds);
-        }, 'studentGrades.grade']);
+        }, 'studentGrades']);
         
         return response()->json([
             'status' => 'success',
@@ -295,25 +295,39 @@ class StudentController extends Controller
         $activeGradeIds = Grade::where('academic_year_id', $academicYearId)->pluck('id');
         $students = Student::whereDoesntHave('studentGrades', function ($query) use ($activeGradeIds) {
             $query->whereIn('grade_id', $activeGradeIds);
-        })->paginate($request->input('per_page', 15));
+        });
 
-        return response()->json([
-            'status' => 'success',
-            'data' => StudentResource::collection($students),
-            'meta' => [
-                'current_page' => $students->currentPage(),
-                'from' => $students->firstItem(),
-                'last_page' => $students->lastPage(),
-                'per_page' => $students->perPage(),
-                'to' => $students->lastItem(),
-                'total' => $students->total(),
-            ],
-            'links' => [
-                'first' => $students->url(1),
-                'last' => $students->url($students->lastPage()),
-                'prev' => $students->previousPageUrl(),
-                'next' => $students->nextPageUrl(),
-            ],
-        ]);
+        if($request->get('per_page') === 'all') {
+            // Ambil semua data tanpa paginasi
+            $students = $students->get();
+            return response()->json([
+                'status' => 'success',
+                'data' => StudentResource::collection($students)
+            ]);
+        } else {
+            // Lanjutkan dengan paginasi (default behavior)
+            $students = $students->paginate($request->input('per_page', 15))
+                ->appends($request->query());
+
+            return response()->json([
+                'status' => 'success',
+                'data' => StudentResource::collection($students),
+                'meta' => [
+                    'current_page' => $students->currentPage(),
+                    'from' => $students->firstItem(),
+                    'last_page' => $students->lastPage(),
+                    'per_page' => $students->perPage(),
+                    'to' => $students->lastItem(),
+                    'total' => $students->total(),
+                ],
+                'links' => [
+                    'first' => $students->url(1),
+                    'last' => $students->url($students->lastPage()),
+                    'prev' => $students->previousPageUrl(),
+                    'next' => $students->nextPageUrl(),
+                ],
+            ]);
+        }
+
     }
 }

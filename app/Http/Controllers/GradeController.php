@@ -117,7 +117,19 @@ class GradeController extends Controller
      */
     public function update(GradeRequest $request, Grade $grade)
     {
-        $grade->update($request->validated());
+        $validatedData = $request->validated();
+
+        $grade->update([
+            'name' => $validatedData['name'],
+            'level' => $validatedData['level'],
+            'academic_year_id' => $validatedData['academic_year_id'],
+        ]);
+
+        // Update relasi siswa
+        // sync() akan memastikan relasi yang ada di array 'student_ids' tersimpan,
+        // dan menghapus relasi lain yang tidak ada di array tersebut.
+        // Jika Anda hanya ingin menambahkan relasi baru, gunakan attach().
+        $grade->students()->sync($validatedData['student_ids']);
 
         return response()->json([
             'status' => 'success',
